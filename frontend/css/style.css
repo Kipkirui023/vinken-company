@@ -1,0 +1,834 @@
+/* =========================================
+   VINKEN SOLUTIONS LIMITED
+   MAIN STYLESHEET
+========================================= */
+
+
+/* =========================================
+   GLOBAL
+========================================= */
+
+:root {
+    --primary-color: #0b2d4d;
+    --secondary-color: #0d6efd;
+    --dark-color: #071b2c;
+    --light-color: #f5f8fb;
+    --text-color: #555;
+    --white: #ffffff;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    font-family: Arial, Helvetica, sans-serif;
+    color: var(--text-color);
+    line-height: 1.7;
+}
+
+a {
+    text-decoration: none;
+}
+
+.section-padding {
+    padding: 90px 0;
+}
+
+
+/* =========================================
+   NAVBAR
+========================================= */
+
+.navbar {
+    padding: 18px 0;
+    background: rgba(7, 27, 44, 0.96);
+    transition: 0.3s ease;
+}
+
+.navbar-brand {
+    font-size: 1.4rem;
+    letter-spacing: 1px;
+    color: var(--white) !important;
+}
+
+.navbar-brand span {
+    color: #8ec5ff;
+}
+
+.navbar .nav-link {
+    color: #ffffff !important;
+    margin-left: 15px;
+    font-size: 0.95rem;
+}
+
+.navbar .nav-link:hover {
+    color: #8ec5ff !important;
+}
+
+.quote-btn {
+    padding: 10px 18px;
+}
+
+
+/* =========================================
+   HERO
+========================================= */
+
+.hero {
+    min-height: 100vh;
+
+    background:
+        linear-gradient(rgba(7, 27, 44, 0.85),
+            rgba(7, 27, 44, 0.88)),
+        url("../images/hero.jpg");
+
+    background-size: cover;
+    background-position: center;
+
+    color: var(--white);
+}
+
+.hero-subtitle {
+    font-weight: bold;
+    letter-spacing: 3px;
+    color: #8ec5ff;
+    margin-bottom: 15px;
+}
+
+.hero h1 {
+    font-size: clamp(2.5rem, 5vw, 4.8rem);
+    font-weight: 700;
+    line-height: 1.1;
+    margin-bottom: 25px;
+}
+
+.hero h1 span {
+    color: #8ec5ff;
+}
+
+.hero-text {
+    max-width: 650px;
+    font-size: 1.15rem;
+    color: #e4edf5;
+    margin-bottom: 35px;
+}
+
+.hero-buttons {
+    display: flex;
+    gap: 15px;
+    flex-wrap: wrap;
+}
+
+
+/* =========================================
+   SECTION HEADINGS
+========================================= */
+
+.section-label {
+    color: var(--secondary-color);
+    font-size: 0.85rem;
+    font-weight: bold;
+    letter-spacing: 2px;
+    margin-bottom: 10px;
+}
+
+.section-heading h2 {
+    color: var(--dark-color);
+    font-size: 2.5rem;
+    font-weight: 700;
+    margin-bottom: 15px;
+}
+
+
+/* =========================================
+   ABOUT
+========================================= */
+
+.about-intro {
+    background: #ffffff;
+}
+
+.about-box {
+    background: var(--light-color);
+    padding: 50px;
+    border-radius: 12px;
+}
+
+.about-icon {
+    width: 70px;
+    height: 70px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    background: var(--secondary-color);
+    color: white;
+
+    border-radius: 10px;
+
+    font-size: 2rem;
+    margin-bottom: 25px;
+}
+
+.about-box h3 {
+    color: var(--dark-color);
+}
+
+
+/* =========================================
+   PRODUCTS
+========================================= */
+
+.products-section {
+    background: var(--light-color);
+}
+
+.category-card {
+    background: white;
+    padding: 35px;
+    height: 100%;
+
+    border-radius: 10px;
+
+    transition: 0.3s ease;
+}
+
+.category-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.08);
+}
+
+.category-icon {
+    width: 65px;
+    height: 65px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    background: #e8f2ff;
+    color: var(--secondary-color);
+
+    border-radius: 10px;
+
+    font-size: 1.8rem;
+
+    margin-bottom: 20px;
+}
+
+.category-card h3 {
+    color: var(--dark-color);
+    font-size: 1.3rem;
+}
+
+.category-card a {
+    color: var(--secondary-color);
+    font-weight: 600;
+}
+
+
+/* =========================================
+   PROCESS
+========================================= */
+
+.process-section {
+    background: #ffffff;
+}
+
+.process-card {
+    position: relative;
+
+    background: var(--light-color);
+
+    padding: 35px;
+
+    height: 100%;
+
+    border-radius: 10px;
+}
+
+.process-card>span {
+    position: absolute;
+
+    top: 15px;
+    right: 20px;
+
+    font-size: 2rem;
+    font-weight: bold;
+
+    color: #dbe8f5;
+}
+
+.process-card i {
+    font-size: 2rem;
+    color: var(--secondary-color);
+
+    display: block;
+
+    margin-bottom: 20px;
+}
+
+.process-card h3 {
+    color: var(--dark-color);
+}
+
+
+/* =========================================
+   CTA
+========================================= */
+
+.cta-section {
+    padding: 70px 0;
+
+    background: var(--primary-color);
+
+    color: white;
+}
+
+.cta-section h2 {
+    font-size: 2.5rem;
+    margin-bottom: 10px;
+}
+
+.cta-section p {
+    color: #dbe7f1;
+}
+
+
+/* =========================================
+   FOOTER
+========================================= */
+
+.footer {
+    background: var(--dark-color);
+
+    color: #c8d3dd;
+
+    padding: 70px 0 20px;
+}
+
+.footer h3 {
+    color: white;
+}
+
+.footer h3 span {
+    color: #8ec5ff;
+}
+
+.footer h4 {
+    color: white;
+    font-size: 1rem;
+    margin-bottom: 20px;
+}
+
+.footer ul {
+    list-style: none;
+    padding: 0;
+}
+
+.footer ul li {
+    margin-bottom: 8px;
+}
+
+.footer ul li a {
+    color: #c8d3dd;
+}
+
+.footer ul li a:hover {
+    color: white;
+}
+
+.footer hr {
+    margin: 40px 0 20px;
+    border-color: #31485c;
+}
+
+.footer-bottom {
+    text-align: center;
+}
+
+
+/* =========================================
+   RESPONSIVE
+========================================= */
+
+@media (max-width: 991px) {
+
+    .navbar .nav-link {
+        margin-left: 0;
+        padding: 10px 0;
+    }
+
+    .quote-btn {
+        display: inline-block;
+    }
+
+    .hero {
+        text-align: center;
+    }
+
+    .hero-text {
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    .hero-buttons {
+        justify-content: center;
+    }
+
+}
+
+
+@media (max-width: 576px) {
+
+    .section-padding {
+        padding: 65px 0;
+    }
+
+    .section-heading h2 {
+        font-size: 2rem;
+    }
+
+    .hero h1 {
+        font-size: 2.6rem;
+    }
+
+    .hero-text {
+        font-size: 1rem;
+    }
+
+    .about-box {
+        padding: 30px;
+    }
+
+    .category-card,
+    .process-card {
+        padding: 28px;
+    }
+
+    .cta-section {
+        text-align: center;
+    }
+
+    .cta-section .btn {
+        margin-top: 20px;
+    }
+
+}
+
+/* =========================================
+   PAGE HEADER
+========================================= */
+
+.page-header {
+    padding: 160px 0 90px;
+    background: var(--light-color);
+}
+
+.page-header h1 {
+    color: var(--dark-color);
+    font-size: clamp(2.5rem, 5vw, 4rem);
+    font-weight: 700;
+    margin-bottom: 20px;
+}
+
+.page-header p:last-child {
+    max-width: 750px;
+    margin: auto;
+}
+
+
+/* =========================================
+   PRODUCT CATEGORY CARDS
+========================================= */
+
+.product-category-card {
+    background: #ffffff;
+    border-radius: 12px;
+    overflow: hidden;
+    height: 100%;
+    box-shadow: 0 5px 25px rgba(0, 0, 0, 0.06);
+    transition: 0.3s ease;
+}
+
+.product-category-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+}
+
+
+.product-category-image {
+    height: 190px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    background: var(--primary-color);
+
+    color: #ffffff;
+
+    font-size: 4rem;
+}
+
+
+.product-category-content {
+    padding: 30px;
+}
+
+.product-category-content h3 {
+    color: var(--dark-color);
+    font-size: 1.35rem;
+    margin-bottom: 12px;
+}
+
+.product-category-content p {
+    font-size: 0.95rem;
+}
+
+
+.product-category-content ul {
+    padding-left: 20px;
+    margin: 20px 0;
+}
+
+.product-category-content ul li {
+    margin-bottom: 7px;
+}
+
+
+.category-link {
+    color: var(--secondary-color);
+    font-weight: 600;
+}
+
+.category-link:hover {
+    color: var(--primary-color);
+}
+
+
+/* =========================================
+   CUSTOM PROCUREMENT
+========================================= */
+
+.custom-procurement {
+    background: #ffffff;
+}
+
+.custom-procurement h2 {
+    color: var(--dark-color);
+    font-size: 2.4rem;
+    font-weight: 700;
+}
+
+/* =========================================
+   SERVICES
+========================================= */
+
+.service-card {
+    background: #ffffff;
+    padding: 35px;
+    height: 100%;
+    border-radius: 12px;
+
+    box-shadow: 0 5px 25px rgba(0, 0, 0, 0.06);
+
+    transition: 0.3s ease;
+}
+
+.service-card:hover {
+    transform: translateY(-8px);
+
+    box-shadow:
+        0 15px 35px rgba(0, 0, 0, 0.1);
+}
+
+
+.service-icon {
+    width: 65px;
+    height: 65px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    background: #e8f2ff;
+    color: var(--secondary-color);
+
+    border-radius: 10px;
+
+    font-size: 1.8rem;
+
+    margin-bottom: 25px;
+}
+
+
+.service-card h3 {
+    color: var(--dark-color);
+
+    font-size: 1.35rem;
+
+    margin-bottom: 15px;
+}
+
+
+.service-card p {
+    margin-bottom: 25px;
+}
+
+
+.service-card a {
+    color: var(--secondary-color);
+
+    font-weight: 600;
+}
+
+
+.service-card a:hover {
+    color: var(--primary-color);
+}
+
+
+/* =========================================
+   SERVICE PROCESS
+========================================= */
+
+.service-process {
+    background: var(--light-color);
+
+    padding: 35px;
+
+    border-radius: 12px;
+}
+
+
+.service-process-item {
+    display: flex;
+
+    gap: 20px;
+
+    padding: 20px 0;
+
+    border-bottom: 1px solid #dce5ed;
+}
+
+
+.service-process-item:last-child {
+    border-bottom: none;
+}
+
+
+.service-process-item>span {
+    min-width: 50px;
+    height: 50px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    background: var(--primary-color);
+
+    color: white;
+
+    border-radius: 50%;
+
+    font-weight: bold;
+}
+
+
+.service-process-item h4 {
+    color: var(--dark-color);
+
+    margin-bottom: 5px;
+}
+
+
+.service-process-item p {
+    margin-bottom: 0;
+
+    font-size: 0.95rem;
+}
+/* =========================================
+   TENDER & PROCUREMENT PAGE
+========================================= */
+
+.process-card {
+    background: var(--white);
+    padding: 30px 20px;
+    border-radius: 10px;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.06);
+    position: relative;
+    transition: 0.3s ease;
+}
+
+.process-card:hover {
+    transform: translateY(-5px);
+}
+
+.process-number {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--secondary-color);
+    margin-bottom: 10px;
+}
+
+.process-icon {
+    font-size: 40px;
+    color: var(--secondary-color);
+    margin-bottom: 20px;
+}
+
+.process-card h5 {
+    color: var(--primary-color);
+    margin-bottom: 12px;
+}
+
+.process-card p {
+    color: var(--text-color);
+    font-size: 14px;
+    line-height: 1.7;
+}
+
+
+/* Tender Form */
+
+#request-form .card {
+    border-radius: 12px;
+}
+
+#request-form .form-label {
+    font-weight: 600;
+    color: var(--primary-color);
+}
+
+#request-form .form-control,
+#request-form .form-select {
+    min-height: 48px;
+    border: 1px solid #dce3e8;
+    border-radius: 6px;
+}
+
+#request-form textarea.form-control {
+    min-height: 130px;
+}
+
+#request-form .form-control:focus,
+#request-form .form-select:focus {
+    border-color: var(--secondary-color);
+    box-shadow: 0 0 0 0.2rem rgba(13, 110, 253, 0.1);
+}
+
+/* =========================================
+   ABOUT PAGE
+========================================= */
+
+.about-highlight {
+    background: var(--light-color);
+    padding: 40px;
+    border-radius: 12px;
+    border-left: 4px solid var(--secondary-color);
+}
+
+.about-highlight-icon {
+    width: 65px;
+    height: 65px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(13, 110, 253, 0.1);
+    color: var(--secondary-color);
+    border-radius: 50%;
+    font-size: 28px;
+    margin-bottom: 20px;
+}
+
+.about-highlight h4 {
+    color: var(--primary-color);
+    margin-bottom: 15px;
+}
+
+.about-service-card {
+    background: var(--white);
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.06);
+    transition: 0.3s ease;
+}
+
+.about-service-card:hover {
+    transform: translateY(-5px);
+}
+
+.about-service-icon {
+    font-size: 35px;
+    color: var(--secondary-color);
+    margin-bottom: 20px;
+}
+
+.about-service-card h5 {
+    color: var(--primary-color);
+    margin-bottom: 12px;
+}
+
+.about-service-card p {
+    color: var(--text-color);
+    font-size: 14px;
+    line-height: 1.7;
+}
+
+.approach-item {
+    height: 100%;
+    padding: 25px;
+    border: 1px solid #e5e9ed;
+    border-radius: 10px;
+    background: var(--white);
+}
+
+.approach-item i {
+    font-size: 30px;
+    color: var(--secondary-color);
+    margin-bottom: 15px;
+}
+
+.approach-item h5 {
+    color: var(--primary-color);
+}
+
+.approach-item p {
+    color: var(--text-color);
+    font-size: 14px;
+    line-height: 1.6;
+    margin-bottom: 0;
+}
+
+.why-card {
+    background: var(--white);
+    padding: 30px 20px;
+    border-radius: 10px;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.05);
+}
+
+.why-card>i {
+    font-size: 38px;
+    color: var(--secondary-color);
+    margin-bottom: 20px;
+}
+
+.why-card h5 {
+    color: var(--primary-color);
+    margin-bottom: 12px;
+}
+
+.why-card p {
+    color: var(--text-color);
+    font-size: 14px;
+    line-height: 1.7;
+}
