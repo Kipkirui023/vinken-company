@@ -89,28 +89,41 @@ CREATE TABLE inquiries (
 -- =========================
 CREATE TABLE quotation_requests (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    customer_id INT,
+
+    customer_id INT NULL,
+
     product_service VARCHAR(255) NOT NULL,
+
     quantity VARCHAR(100),
+
     delivery_location VARCHAR(255),
-    tender_reference VARCHAR(150),
-    requirement_type VARCHAR(100),
-    deadline DATE,
+
+    tender_lpo_reference VARCHAR(255),
+
+    requirement_type ENUM(
+        'General Inquiry',
+        'Quotation',
+        'Tender',
+        'LPO'
+    ) DEFAULT 'Quotation',
+
+    required_delivery_date DATE NULL,
+
     additional_requirements TEXT,
+
     status ENUM(
-        'pending',
+        'new',
         'reviewing',
         'quoted',
-        'approved',
-        'rejected',
-        'completed'
-    ) DEFAULT 'pending',
+        'completed',
+        'cancelled'
+    ) DEFAULT 'new',
+
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 
     FOREIGN KEY (customer_id)
         REFERENCES customers(id)
         ON DELETE SET NULL
-        ON UPDATE CASCADE
 );
 
 -- =========================
@@ -144,17 +157,26 @@ CREATE TABLE tender_requests (
 -- =========================
 -- TENDER DOCUMENTS
 -- =========================
-CREATE TABLE tender_documents (
+CREATE TABLE quotation_documents (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    tender_request_id INT NOT NULL,
+
+    quotation_request_id INT NOT NULL,
+
+    original_name VARCHAR(255) NOT NULL,
+
     file_name VARCHAR(255) NOT NULL,
+
     file_path VARCHAR(500) NOT NULL,
+
+    file_type VARCHAR(100),
+
+    file_size INT,
+
     uploaded_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 
-    FOREIGN KEY (tender_request_id)
-        REFERENCES tender_requests(id)
+    FOREIGN KEY (quotation_request_id)
+        REFERENCES quotation_requests(id)
         ON DELETE CASCADE
-        ON UPDATE CASCADE
 );
 
 -- =========================

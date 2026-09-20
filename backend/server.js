@@ -5,6 +5,8 @@ require("dotenv").config();
 const db = require("./config/db");
 const productRoutes = require("./routes/productRoutes");
 const serviceRoutes = require("./routes/serviceRoutes");
+const inquiryRoutes = require("./routes/inquiryRoutes");
+const quotationRoutes = require("./routes/quotationRoutes");
 
 const app = express();
 
@@ -55,7 +57,8 @@ app.get("/api/db-test", async (req, res) => {
 
 app.use("/api/products", productRoutes);
 app.use("/api/services", serviceRoutes);
-
+app.use("/api/inquiries", inquiryRoutes);
+app.use("/api/quotations", quotationRoutes);
 // Start server
 app.listen(PORT, () => {
   console.log(`Vinken Solutions server running on port ${PORT}`);
