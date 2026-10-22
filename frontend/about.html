@@ -5,6 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
     <title>About Us | Vinken Solutions Limited</title>
+    <meta
+      name="description"
+      content="Learn about Vinken Solutions Limited, a procurement and general supply partner supporting organizations across Kenya."
+    />
+    <meta name="theme-color" content="#102638" />
 
     <!-- Bootstrap CSS -->
     <link
@@ -26,13 +31,18 @@
     <!-- ================= NAVBAR ================= -->
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top">
       <div class="container">
-        <a class="navbar-brand fw-bold" href="index.html"> VINKEN SOLUTIONS </a>
+        <a class="navbar-brand fw-bold" href="index.html">
+          VINKEN <span>SOLUTIONS</span>
+        </a>
 
         <button
           class="navbar-toggler"
           type="button"
           data-bs-toggle="collapse"
           data-bs-target="#navbarNav"
+          aria-controls="navbarNav"
+          aria-expanded="false"
+          aria-label="Toggle navigation"
         >
           <span class="navbar-toggler-icon"></span>
         </button>
@@ -44,7 +54,7 @@
             </li>
 
             <li class="nav-item">
-              <a class="nav-link active" href="about.html"> About Us </a>
+              <a class="nav-link active" href="about.html" aria-current="page"> About Us </a>
             </li>
 
             <li class="nav-item">
@@ -64,7 +74,7 @@
             </li>
 
             <li class="nav-item ms-lg-2 mt-2 mt-lg-0">
-              <a class="btn btn-primary px-3" href="tender.html#request-form">
+              <a class="btn btn-primary px-3" href="quote.html">
                 Request a Quote
               </a>
             </li>
@@ -477,7 +487,7 @@
 
             <p>
               <i class="bi bi-telephone me-2"></i>
-              +254 7XX XXX XXX
+              <a href="tel:+254748018182">+254 748 018 182</a>
             </p>
 
             <p>

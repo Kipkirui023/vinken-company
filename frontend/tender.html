@@ -5,6 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
     <title>Tender & Procurement | Vinken Solutions Limited</title>
+    <meta
+      name="description"
+      content="Submit tender, LPO, quotation and procurement requirements to Vinken Solutions Limited for review and sourcing."
+    />
+    <meta name="theme-color" content="#102638" />
 
     <!-- Bootstrap CSS -->
     <link
@@ -26,13 +31,18 @@
     <!-- ================= NAVBAR ================= -->
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top">
       <div class="container">
-        <a class="navbar-brand fw-bold" href="index.html"> VINKEN SOLUTIONS </a>
+        <a class="navbar-brand fw-bold" href="index.html">
+          VINKEN <span>SOLUTIONS</span>
+        </a>
 
         <button
           class="navbar-toggler"
           type="button"
           data-bs-toggle="collapse"
           data-bs-target="#navbarNav"
+          aria-controls="navbarNav"
+          aria-expanded="false"
+          aria-label="Toggle navigation"
         >
           <span class="navbar-toggler-icon"></span>
         </button>
@@ -56,7 +66,7 @@
             </li>
 
             <li class="nav-item">
-              <a class="nav-link active" href="tender.html">
+              <a class="nav-link active" href="tender.html" aria-current="page">
                 Tender & Procurement
               </a>
             </li>
@@ -66,7 +76,7 @@
             </li>
 
             <li class="nav-item ms-lg-2 mt-2 mt-lg-0">
-              <a class="btn btn-primary px-3" href="tender.html#request-form">
+              <a class="btn btn-primary px-3" href="quote.html">
                 Request a Quote
               </a>
             </li>
@@ -269,7 +279,7 @@
 
             <div class="card border-0 shadow-sm">
               <div class="card-body p-4 p-md-5">
-                <form id="tenderForm">
+                <form id="tender-form">
                   <!-- ORGANIZATION -->
                   <div class="row g-4">
                     <div class="col-md-6">
@@ -329,7 +339,7 @@
                         class="form-control"
                         id="phone"
                         name="phone"
-                        placeholder="07XX XXX XXX"
+                        placeholder="e.g. 0712 345 678"
                         required
                       />
                     </div>
@@ -354,9 +364,9 @@
 
                         <option value="Quotation">Quotation Request</option>
 
-                        <option value="Product Request">Product Request</option>
+                        <option value="General Inquiry">Product Request</option>
 
-                        <option value="Service Request">Service Request</option>
+                        <option value="General Inquiry">Service Request</option>
                       </select>
                     </div>
 
@@ -438,25 +448,6 @@
                       />
                     </div>
 
-                    <!-- DOCUMENT -->
-                    <div class="col-md-6">
-                      <label for="document" class="form-label">
-                        Upload Tender / LPO / Specification
-                      </label>
-
-                      <input
-                        type="file"
-                        class="form-control"
-                        id="document"
-                        name="document"
-                        accept=".pdf,.doc,.docx,.xls,.xlsx"
-                      />
-
-                      <small class="text-muted">
-                        PDF, Word or Excel documents
-                      </small>
-                    </div>
-
                     <!-- ADDITIONAL INFORMATION -->
                     <div class="col-12">
                       <label for="additionalInfo" class="form-label">
@@ -474,6 +465,11 @@
 
                     <!-- SUBMIT -->
                     <div class="col-12 text-center mt-4">
+                      <div
+                        class="mb-3"
+                        data-form-status
+                        aria-live="polite"
+                      ></div>
                       <button type="submit" class="btn btn-primary btn-lg px-5">
                         <i class="bi bi-send me-2"></i>
                         Submit Request
@@ -481,6 +477,11 @@
                     </div>
                   </div>
                 </form>
+                <p class="small text-muted mt-3 mb-0">
+                  To include tender or LPO documents, email them to
+                  <a href="mailto:info@vinkensolutions.co.ke">info@vinkensolutions.co.ke</a>
+                  and include your reference number.
+                </p>
               </div>
             </div>
           </div>
@@ -552,7 +553,7 @@
 
             <p>
               <i class="bi bi-telephone me-2"></i>
-              +254 7XX XXX XXX
+              <a href="tel:+254748018182">+254 748 018 182</a>
             </p>
 
             <p>

@@ -1,4 +1,5 @@
 const express = require("express");
+const requireAdminApiKey = require("../middleware/requireAdminApiKey");
 
 const router = express.Router();
 
@@ -16,9 +17,9 @@ router.get("/", getServices);
 router.get("/:id", getService);
 
 // CREATE service
-router.post("/", addService);
+router.post("/", requireAdminApiKey, addService);
 
 // DELETE service
-router.delete("/:id", removeService);
+router.delete("/:id", requireAdminApiKey, removeService);
 
 module.exports = router;

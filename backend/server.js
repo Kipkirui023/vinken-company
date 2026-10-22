@@ -1,5 +1,6 @@
 const express = require("express");
 const cors = require("cors");
+const path = require("path");
 require("dotenv").config();
 
 const db = require("./config/db");
@@ -10,21 +11,27 @@ const quotationRoutes = require("./routes/quotationRoutes");
 
 const app = express();
 
-const PORT = process.env.PORT || 5000;
+const PORT = Number(process.env.PORT || 5000);
+const FRONTEND_DIRECTORY = path.join(__dirname, "..", "frontend");
 
-// Middleware
-app.use(cors());
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+const allowedOrigins = (process.env.CORS_ORIGINS || "")
+  .split(",")
+  .map((origin) => origin.trim())
+  .filter(Boolean);
 
-// Test route
-// Home API
-app.get("/", (req, res) => {
-  res.json({
-    success: true,
-    message: "Vinken Solutions API is running",
-  });
+if (allowedOrigins.length > 0) {
+  app.use(cors({ origin: allowedOrigins }));
+}
+
+app.disable("x-powered-by");
+app.use((req, res, next) => {
+  res.setHeader("X-Content-Type-Options", "nosniff");
+  res.setHeader("Referrer-Policy", "strict-origin-when-cross-origin");
+  res.setHeader("X-Frame-Options", "DENY");
+  next();
 });
+app.use(express.json({ limit: "1mb" }));
+app.use(express.urlencoded({ extended: true, limit: "1mb" }));
 
 // Health check
 app.get("/api/health", (req, res) => {
@@ -59,7 +66,16 @@ app.use("/api/products", productRoutes);
 app.use("/api/services", serviceRoutes);
 app.use("/api/inquiries", inquiryRoutes);
 app.use("/api/quotations", quotationRoutes);
-// Start server
-app.listen(PORT, () => {
-  console.log(`Vinken Solutions server running on port ${PORT}`);
+
+app.use(express.static(FRONTEND_DIRECTORY));
+
+app.use("/api", (req, res) => {
+  res.status(404).json({
+    success: false,
+    message: "API endpoint not found.",
+  });
+});
+
+app.listen(PORT, "0.0.0.0", () => {
+  console.log(`Vinken Solutions website and API running on port ${PORT}`);
 });

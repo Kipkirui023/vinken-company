@@ -1,4 +1,5 @@
 const express = require("express");
+const requireAdminApiKey = require("../middleware/requireAdminApiKey");
 
 const router = express.Router();
 
@@ -16,9 +17,9 @@ router.get("/", getProducts);
 router.get("/:id", getProduct);
 
 // POST new product
-router.post("/", addProduct);
+router.post("/", requireAdminApiKey, addProduct);
 
 // DELETE product
-router.delete("/:id", removeProduct);
+router.delete("/:id", requireAdminApiKey, removeProduct);
 
 module.exports = router;

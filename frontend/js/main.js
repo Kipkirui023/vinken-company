@@ -1,583 +1,354 @@
-// ============================================================
-// VINKEN SOLUTIONS LIMITED
-// MAIN JAVASCRIPT
-// ============================================================
+const API_URL = "/api";
 
-const API_URL = "http://localhost:5000/api";
-
-// ============================================================
-// PAGE INITIALIZATION
-// ============================================================
-
-document.addEventListener("DOMContentLoaded", function () {
-  console.log("Vinken Solutions website loaded successfully.");
-
-  // Products
+document.addEventListener("DOMContentLoaded", () => {
   if (document.getElementById("products-container")) {
     loadProducts();
   }
 
-  // Services
   if (document.getElementById("services-container")) {
     loadServices();
   }
 
-  // Contact form
-  initializeContactForm();
+  bindJsonForm("contact-form", {
+    endpoint: "/inquiries",
+    successMessage:
+      "Thank you. Your message has been received and our team will be in touch.",
+    getPayload: (form) => {
+      const fields = new FormData(form);
+      return {
+        organization_name: fields.get("organization"),
+        contact_person: fields.get("name"),
+        email: fields.get("email"),
+        phone: fields.get("phone"),
+        subject: fields.get("subject"),
+        message: fields.get("message"),
+      };
+    },
+  });
 
-  // Request quotation form
-  initializeQuoteForm();
+  bindJsonForm("quote-form", {
+    endpoint: "/quotations",
+    successMessage: "Your quotation request has been received.",
+    getPayload: (form) => quotationPayload(new FormData(form)),
+  });
+
+  bindJsonForm("tender-form", {
+    endpoint: "/quotations",
+    successMessage:
+      "Your procurement requirement has been received. Please email any tender or LPO documents to info@vinkensolutions.co.ke and include your reference.",
+    getPayload: (form) => {
+      const fields = new FormData(form);
+      return {
+        organization_name: fields.get("organization"),
+        contact_person: fields.get("contactPerson"),
+        email: fields.get("email"),
+        phone: fields.get("phone"),
+        product_service: fields.get("requirement"),
+        quantity: fields.get("quantity"),
+        delivery_location: fields.get("deliveryLocation"),
+        tender_lpo_reference: fields.get("reference"),
+        requirement_type: fields.get("requirementType"),
+        required_delivery_date: fields.get("deliveryDate"),
+        additional_requirements: fields.get("additionalInfo"),
+      };
+    },
+  });
+
+  const year = new Date().getFullYear();
+  document
+    .querySelectorAll(".footer-bottom p, footer .text-center p")
+    .forEach((element) => {
+      element.textContent = element.textContent.replace(/©|&copy;|©/g, "©").replace(/\b20\d{2}\b/, year);
+    });
+
+  const today = new Date();
+  const localDate = new Date(
+    today.getTime() - today.getTimezoneOffset() * 60_000,
+  )
+    .toISOString()
+    .slice(0, 10);
+  document
+    .querySelectorAll('input[type="date"]')
+    .forEach((input) => input.setAttribute("min", localDate));
 });
 
-// ============================================================
-// PRODUCTS
-// ============================================================
+function quotationPayload(fields) {
+  return {
+    organization_name: fields.get("organization_name"),
+    contact_person: fields.get("contact_person"),
+    email: fields.get("email"),
+    phone: fields.get("phone"),
+    address: fields.get("address"),
+    product_service: fields.get("product_service"),
+    quantity: fields.get("quantity"),
+    delivery_location: fields.get("delivery_location"),
+    tender_lpo_reference: fields.get("tender_lpo_reference"),
+    requirement_type: fields.get("requirement_type"),
+    required_delivery_date: fields.get("required_delivery_date"),
+    additional_requirements: fields.get("additional_requirements"),
+  };
+}
 
 async function loadProducts() {
   const container = document.getElementById("products-container");
 
-  if (!container) {
-    return;
-  }
-
   try {
-    const response = await fetch(`${API_URL}/products`);
-
-    if (!response.ok) {
-      throw new Error("Failed to fetch products");
-    }
-
-    const result = await response.json();
-
-    console.log("Products:", result);
-
-    if (!result.success) {
-      throw new Error(result.message || "Unable to load products");
-    }
-
-    displayProducts(result.data);
+    const result = await fetchJson(`${API_URL}/products`);
+    renderProducts(container, result.data);
   } catch (error) {
     console.error("Product loading error:", error);
-
-    container.innerHTML = `
-            <div class="col-12">
-                <div class="alert alert-danger text-center">
-                    <strong>Unable to load products.</strong>
-                    <br>
-                    Please try again later.
-                </div>
-            </div>
-        `;
+    renderLoadError(container, "Product listings are temporarily unavailable.");
   }
 }
 
-function displayProducts(products) {
-  const container = document.getElementById("products-container");
+function renderProducts(container, products) {
+  container.replaceChildren();
 
-  if (!container) {
+  if (!Array.isArray(products) || products.length === 0) {
+    renderEmptyState(container, "Product listings are being updated.");
     return;
   }
 
-  if (!products || products.length === 0) {
-    container.innerHTML = `
-            <div class="col-12">
-                <div class="alert alert-info text-center">
-                    No products are currently available.
-                </div>
-            </div>
-        `;
+  products.forEach((product) => {
+    const column = document.createElement("div");
+    column.className = "col-md-6 col-lg-4";
 
-    return;
-  }
+    const card = document.createElement("article");
+    card.className = "card product-card h-100 border-0";
 
-  container.innerHTML = products
-    .map(function (product) {
-      return `
-            <div class="col-md-6 col-lg-4">
+    const imageWrap = document.createElement("div");
+    imageWrap.className = "product-image";
+    const imageUrl = safeImageUrl(product.image);
 
-                <div class="card product-card h-100 shadow-sm border-0">
+    if (imageUrl) {
+      const image = document.createElement("img");
+      image.src = imageUrl;
+      image.alt = product.name ? `${product.name} product image` : "Product image";
+      image.loading = "lazy";
+      imageWrap.append(image);
+    } else {
+      const placeholder = document.createElement("div");
+      placeholder.className = "product-placeholder";
+      placeholder.setAttribute("aria-hidden", "true");
+      placeholder.innerHTML = '<i class="bi bi-box-seam"></i>';
+      imageWrap.append(placeholder);
+    }
 
-                    <div class="product-image">
+    const body = document.createElement("div");
+    body.className = "card-body p-4";
 
-                        ${
-                          product.image
-                            ? `
-                                    <img
-                                        src="${product.image}"
-                                        alt="${product.name}"
-                                        class="img-fluid"
-                                    >
-                                `
-                            : `
-                                    <div class="product-placeholder">
-                                        <i class="bi bi-box-seam"></i>
-                                    </div>
-                                `
-                        }
+    const category = document.createElement("span");
+    category.className = "badge bg-primary mb-2";
+    category.textContent = product.category || "General supply";
 
-                    </div>
+    const title = document.createElement("h2");
+    title.className = "h5 card-title";
+    title.textContent = product.name || "Product";
 
-                    <div class="card-body">
+    const description = document.createElement("p");
+    description.className = "card-text";
+    description.textContent = product.description || "";
 
-                        <span class="badge bg-primary mb-2">
-                            ${product.category || "General Supply"}
-                        </span>
+    body.append(category, title, description);
 
-                        <h5 class="card-title">
-                            ${product.name}
-                        </h5>
+    if (product.specifications) {
+      const specifications = document.createElement("p");
+      specifications.className = "small text-muted";
+      specifications.textContent = `Specifications: ${product.specifications}`;
+      body.append(specifications);
+    }
 
-                        <p class="card-text">
-                            ${product.description || ""}
-                        </p>
+    const link = document.createElement("a");
+    link.className = "btn btn-outline-primary";
+    link.href = "quote.html";
+    link.textContent = "Request a quote";
+    body.append(link);
 
-                        ${
-                          product.specifications
-                            ? `
-                                    <p class="small text-muted">
-
-                                        <strong>
-                                            Specifications:
-                                        </strong>
-
-                                        <br>
-
-                                        ${product.specifications}
-
-                                    </p>
-                                `
-                            : ""
-                        }
-
-                        <a
-                            href="quote.html"
-                            class="btn btn-outline-primary"
-                        >
-                            Request a Quote
-                        </a>
-
-                    </div>
-
-                </div>
-
-            </div>
-        `;
-    })
-    .join("");
+    card.append(imageWrap, body);
+    column.append(card);
+    container.append(column);
+  });
 }
-
-// ============================================================
-// SERVICES
-// ============================================================
 
 async function loadServices() {
   const container = document.getElementById("services-container");
 
-  if (!container) {
+  try {
+    const result = await fetchJson(`${API_URL}/services`);
+    renderServices(container, result.data);
+  } catch (error) {
+    console.error("Service loading error:", error);
+    renderLoadError(container, "Service listings are temporarily unavailable.");
+  }
+}
+
+function renderServices(container, services) {
+  container.replaceChildren();
+
+  if (!Array.isArray(services) || services.length === 0) {
+    renderEmptyState(container, "Our service listings are being updated.");
     return;
+  }
+
+  services.forEach((service) => {
+    const column = document.createElement("div");
+    column.className = "col-md-6 col-lg-4";
+
+    const card = document.createElement("article");
+    card.className = "card service-card h-100 border-0";
+
+    const icon = document.createElement("div");
+    icon.className = "service-icon";
+    icon.setAttribute("aria-hidden", "true");
+    icon.innerHTML = '<i class="bi bi-briefcase"></i>';
+
+    const title = document.createElement("h2");
+    title.className = "h5 card-title";
+    title.textContent = service.name || "Service";
+
+    const description = document.createElement("p");
+    description.className = "card-text";
+    description.textContent = service.description || "";
+
+    const link = document.createElement("a");
+    link.className = "btn btn-outline-primary";
+    link.href = "quote.html";
+    link.textContent = "Request a quote";
+
+    const body = document.createElement("div");
+    body.className = "card-body p-4";
+    body.append(icon, title, description, link);
+    card.append(body);
+    column.append(card);
+    container.append(column);
+  });
+}
+
+function renderEmptyState(container, message) {
+  const column = document.createElement("div");
+  column.className = "col-12";
+  column.innerHTML = `
+    <div class="alert alert-light text-center border" role="status"></div>
+  `;
+  column.querySelector(".alert").textContent = message;
+  container.append(column);
+}
+
+function renderLoadError(container, message) {
+  container.replaceChildren();
+  const column = document.createElement("div");
+  column.className = "col-12";
+  const alert = document.createElement("div");
+  alert.className = "alert alert-warning text-center";
+  alert.setAttribute("role", "status");
+  alert.textContent = message;
+  column.append(alert);
+  container.append(column);
+}
+
+function safeImageUrl(value) {
+  if (typeof value !== "string" || !value.trim()) {
+    return null;
   }
 
   try {
-    const response = await fetch(`${API_URL}/services`);
-
-    if (!response.ok) {
-      throw new Error("Failed to fetch services");
+    const url = new URL(value, window.location.origin);
+    if (url.protocol !== "https:" && url.protocol !== "http:") {
+      return null;
     }
-
-    const result = await response.json();
-
-    console.log("Services:", result);
-
-    if (!result.success) {
-      throw new Error(result.message || "Unable to load services");
-    }
-
-    displayServices(result.data);
-  } catch (error) {
-    console.error("Service loading error:", error);
-
-    container.innerHTML = `
-            <div class="col-12">
-
-                <div class="alert alert-danger text-center">
-
-                    <strong>
-                        Unable to load services.
-                    </strong>
-
-                    <br>
-
-                    Please try again later.
-
-                </div>
-
-            </div>
-        `;
+    return url.href;
+  } catch {
+    return null;
   }
 }
 
-function displayServices(services) {
-  const container = document.getElementById("services-container");
-
-  if (!container) {
+function bindJsonForm(formId, { endpoint, getPayload, successMessage }) {
+  const form = document.getElementById(formId);
+  if (!form) {
     return;
   }
 
-  if (!services || services.length === 0) {
-    container.innerHTML = `
-            <div class="col-12">
-
-                <div class="alert alert-info text-center">
-                    No services are currently available.
-                </div>
-
-            </div>
-        `;
-
+  const button = form.querySelector('button[type="submit"]');
+  if (!button) {
+    console.error(`Submit button not found for form "${formId}".`);
     return;
   }
 
-  container.innerHTML = services
-    .map(function (service) {
-      return `
-            <div class="col-md-6 col-lg-4">
-
-                <div class="card service-card h-100 shadow-sm border-0">
-
-                    <div class="card-body">
-
-                        <div class="service-icon mb-3">
-                            <i class="bi bi-briefcase"></i>
-                        </div>
-
-                        <h5 class="card-title">
-                            ${service.name}
-                        </h5>
-
-                        <p class="card-text">
-                            ${service.description || ""}
-                        </p>
-
-                        <a
-                            href="quote.html"
-                            class="btn btn-outline-primary"
-                        >
-                            Request a Quote
-                        </a>
-
-                    </div>
-
-                </div>
-
-            </div>
-        `;
-    })
-    .join("");
-}
-
-// ============================================================
-// CONTACT FORM
-// ============================================================
-
-function initializeContactForm() {
-  const contactForm = document.getElementById("contact-form");
-
-  if (!contactForm) {
+  const status = form.querySelector("[data-form-status]");
+  if (!status) {
+    console.error(`Status message area not found for form "${formId}".`);
     return;
   }
 
-  console.log("Contact form detected.");
+  const originalButtonContent = button.innerHTML;
 
-  contactForm.addEventListener("submit", async function (event) {
+  form.addEventListener("submit", async (event) => {
     event.preventDefault();
-
-    const submitButton = contactForm.querySelector('button[type="submit"]');
-
-    if (!submitButton) {
-      return;
-    }
-
-    const originalText = submitButton.innerHTML;
-
-    submitButton.disabled = true;
-
-    submitButton.innerHTML = `
-                <span
-                    class="spinner-border spinner-border-sm"
-                    role="status"
-                ></span>
-
-                Sending...
-            `;
-
-    const formData = {
-      organization_name: document
-        .getElementById("organization_name")
-        ?.value.trim(),
-
-      contact_person: document.getElementById("contact_person")?.value.trim(),
-
-      email: document.getElementById("email")?.value.trim(),
-
-      phone: document.getElementById("phone")?.value.trim(),
-
-      subject: document.getElementById("subject")?.value.trim(),
-
-      message: document.getElementById("message")?.value.trim(),
-    };
+    button.disabled = true;
+    button.textContent = "Sending...";
+    status.textContent = "";
+    status.className = "mb-3";
 
     try {
-      const response = await fetch(`${API_URL}/inquiries`, {
-        method: "POST",
-
-        headers: {
-          "Content-Type": "application/json",
-        },
-
-        body: JSON.stringify(formData),
-      });
-
-      const result = await response.json();
-
-      if (!response.ok || !result.success) {
-        throw new Error(result.message || "Failed to submit inquiry.");
-      }
-
-      alert(
-        "Thank you! Your inquiry has been submitted successfully. We will get back to you soon.",
-      );
-
-      contactForm.reset();
+      const result = await postJson(`${API_URL}${endpoint}`, getPayload(form));
+      const reference =
+        result.data?.quotation_id ?? result.data?.inquiry_id ?? null;
+      status.textContent = reference
+        ? `${successMessage} Reference: #${reference}.`
+        : successMessage;
+      status.className = "alert alert-success mb-3";
+      status.setAttribute("role", "status");
+      form.reset();
     } catch (error) {
-      console.error("Contact form error:", error);
-
-      alert(
-        error.message ||
-          "Unable to submit your inquiry. Please try again later.",
-      );
+      console.error(`Form submission error (${formId}):`, error);
+      status.textContent =
+        error instanceof Error
+          ? error.message
+          : "We could not send your request. Please try again.";
+      status.className = "alert alert-danger mb-3";
+      status.setAttribute("role", "alert");
     } finally {
-      submitButton.disabled = false;
-
-      submitButton.innerHTML = originalText;
+      button.disabled = false;
+      button.innerHTML = originalButtonContent;
     }
   });
 }
 
-// ============================================================
-// REQUEST A QUOTE
-// ============================================================
-
-function initializeQuoteForm() {
-  const quoteForm = document.getElementById("quote-form");
-
-  if (!quoteForm) {
-    return;
-  }
-
-  console.log("Quote form detected.");
-
-  const submitButton = document.getElementById("quote-submit-button");
-
-  const messageContainer = document.getElementById("quote-message");
-
-  if (!submitButton) {
-    console.error("quote-submit-button not found.");
-
-    return;
-  }
-
-  if (!messageContainer) {
-    console.error("quote-message not found.");
-
-    return;
-  }
-
-  quoteForm.addEventListener("submit", async function (event) {
-    event.preventDefault();
-
-    console.log("Quotation form submitted.");
-
-    const originalButtonText = submitButton.innerHTML;
-
-    // ------------------------------------------------
-    // LOADING
-    // ------------------------------------------------
-
-    submitButton.disabled = true;
-
-    submitButton.innerHTML = `
-                <span
-                    class="spinner-border spinner-border-sm me-2"
-                    role="status"
-                ></span>
-
-                Submitting Request...
-            `;
-
-    messageContainer.innerHTML = "";
-
-    // ------------------------------------------------
-    // FORM DATA
-    // ------------------------------------------------
-
-    const formData = {
-      organization_name: document
-        .getElementById("organization_name")
-        .value.trim(),
-
-      contact_person: document.getElementById("contact_person").value.trim(),
-
-      email: document.getElementById("email").value.trim(),
-
-      phone: document.getElementById("phone").value.trim(),
-
-      address: document.getElementById("address").value.trim(),
-
-      product_service: document.getElementById("product_service").value.trim(),
-
-      quantity: document.getElementById("quantity").value.trim(),
-
-      delivery_location: document
-        .getElementById("delivery_location")
-        .value.trim(),
-
-      tender_lpo_reference: document
-        .getElementById("tender_lpo_reference")
-        .value.trim(),
-
-      requirement_type: document.getElementById("requirement_type").value,
-
-      required_delivery_date: document.getElementById("required_delivery_date")
-        .value,
-
-      additional_requirements: document
-        .getElementById("additional_requirements")
-        .value.trim(),
-    };
-
-    console.log("Quotation data:", formData);
-
-    // ------------------------------------------------
-    // SEND TO API
-    // ------------------------------------------------
-
-    try {
-      const response = await fetch(`${API_URL}/quotations`, {
-        method: "POST",
-
-        headers: {
-          "Content-Type": "application/json",
-        },
-
-        body: JSON.stringify(formData),
-      });
-
-      console.log("Quotation response status:", response.status);
-
-      const result = await response.json();
-
-      console.log("Quotation API response:", result);
-
-      if (!response.ok || !result.success) {
-        throw new Error(
-          result.message || "Failed to submit quotation request.",
-        );
-      }
-
-      // ------------------------------------------------
-      // SUCCESS
-      // ------------------------------------------------
-
-      const quotationId =
-        result.data && result.data.quotation_id
-          ? result.data.quotation_id
-          : "N/A";
-
-      messageContainer.innerHTML = `
-
-                    <div
-                        class="alert alert-success"
-                        role="alert"
-                    >
-
-                        <h5 class="alert-heading">
-
-                            <i
-                                class="bi bi-check-circle me-2"
-                            ></i>
-
-                            Request Submitted Successfully
-
-                        </h5>
-
-                        <p class="mb-1">
-
-                            Thank you for contacting
-                            Vinken Solutions Limited.
-
-                        </p>
-
-                        <p class="mb-0">
-
-                            Your quotation request has been received.
-                            Our team will review your requirements
-                            and get back to you.
-
-                        </p>
-
-                        <hr>
-
-                        <small>
-
-                            Reference:
-
-                            <strong>
-                                #${quotationId}
-                            </strong>
-
-                        </small>
-
-                    </div>
-
-                `;
-
-      quoteForm.reset();
-
-      messageContainer.scrollIntoView({
-        behavior: "smooth",
-        block: "center",
-      });
-    } catch (error) {
-      console.error("Quotation request error:", error);
-
-      messageContainer.innerHTML = `
-
-                    <div
-                        class="alert alert-danger"
-                        role="alert"
-                    >
-
-                        <i
-                            class="bi bi-exclamation-triangle me-2"
-                        ></i>
-
-                        ${
-                          error.message ||
-                          "Unable to submit your request. Please try again."
-                        }
-
-                    </div>
-
-                `;
-
-      messageContainer.scrollIntoView({
-        behavior: "smooth",
-        block: "center",
-      });
-    } finally {
-      submitButton.disabled = false;
-
-      submitButton.innerHTML = originalButtonText;
-    }
+async function fetchJson(url) {
+  const response = await fetch(url, {
+    headers: { Accept: "application/json" },
   });
+  const result = await readJsonResponse(response);
+
+  if (!response.ok || !result.success) {
+    throw new Error(result.message || "The request could not be completed.");
+  }
+
+  return result;
+}
+
+async function postJson(url, payload) {
+  const response = await fetch(url, {
+    method: "POST",
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(payload),
+  });
+  const result = await readJsonResponse(response);
+
+  if (!response.ok || !result.success) {
+    throw new Error(result.message || "The request could not be completed.");
+  }
+
+  return result;
+}
+
+async function readJsonResponse(response) {
+  const contentType = response.headers.get("content-type") || "";
+  if (!contentType.includes("application/json")) {
+    throw new Error("The service returned an unexpected response.");
+  }
+  return response.json();
 }

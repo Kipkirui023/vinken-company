@@ -1,4 +1,5 @@
 const express = require("express");
+const requireAdminApiKey = require("../middleware/requireAdminApiKey");
 
 const router = express.Router();
 
@@ -12,9 +13,9 @@ const {
 router.post("/", createInquiry);
 
 // GET ALL INQUIRIES
-router.get("/", getInquiries);
+router.get("/", requireAdminApiKey, getInquiries);
 
 // GET SINGLE INQUIRY
-router.get("/:id", getInquiry);
+router.get("/:id", requireAdminApiKey, getInquiry);
 
 module.exports = router;

@@ -6,6 +6,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
     <title>Request a Quote | Vinken Solutions Limited</title>
+    <meta
+      name="description"
+      content="Request a quotation from Vinken Solutions Limited for products, services, tender fulfillment or procurement requirements."
+    />
+    <meta name="theme-color" content="#102638" />
 
     <!-- Bootstrap CSS -->
     <link
@@ -30,13 +35,18 @@
 
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top">
       <div class="container">
-        <a class="navbar-brand fw-bold" href="index.html"> VINKEN SOLUTIONS </a>
+        <a class="navbar-brand fw-bold" href="index.html">
+          VINKEN <span>SOLUTIONS</span>
+        </a>
 
         <button
           class="navbar-toggler"
           type="button"
           data-bs-toggle="collapse"
           data-bs-target="#mainNavbar"
+          aria-controls="mainNavbar"
+          aria-expanded="false"
+          aria-label="Toggle navigation"
         >
           <span class="navbar-toggler-icon"></span>
         </button>
@@ -183,7 +193,7 @@
                         class="form-control"
                         id="phone"
                         name="phone"
-                        placeholder="07XXXXXXXX"
+                        placeholder="e.g. 0712 345 678"
                       />
                     </div>
 
@@ -319,7 +329,12 @@
 
                   <!-- SUBMIT -->
 
-                  <div id="quote-message" class="mb-3"></div>
+                  <div
+                    id="quote-message"
+                    class="mb-3"
+                    data-form-status
+                    aria-live="polite"
+                  ></div>
 
                   <div class="d-grid">
                     <button
