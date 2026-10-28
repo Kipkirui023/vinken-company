@@ -66,25 +66,24 @@ async function testConnection() {
 
 async function query(sql, params = []) {
   try {
-    const { sql: normalizedSql, params: normalizedParams } = normalizePlaceholders(
-      ensureReturningId(sql),
-      params,
-    );
-    const result = await pool.query(normalizedSql, normalizedParams);
-    const rows = Array.isArray(result.rows) ? result.rows : [];
+    const prepared = normalizePlaceholders(ensureReturningId(sql), params);
+    const result = await pool.query(prepared.sql, prepared.params);
 
-    const wrapped = {
-      rows,
-      fields: result.fields || [],
-      rowCount: result.rowCount ?? rows.length,
-      affectedRows: result.rowCount ?? rows.length,
+    if (result.command === "SELECT") {
+      return [result.rows, result.fields || []];
+    }
+
+    const rowData = {
       insertId:
-        result.command === "INSERT" && rows.length > 0 && rows[0].id !== undefined
-          ? rows[0].id
+        result.rows && result.rows[0] && result.rows[0].id !== undefined
+          ? result.rows[0].id
           : undefined,
+      affectedRows: result.rowCount ?? 0,
+      rowCount: result.rowCount ?? 0,
+      command: result.command,
     };
 
-    return [wrapped, result.fields || []];
+    return [rowData, result.fields || []];
   } catch (error) {
     console.error("Database query error:", error.message);
     throw error;
