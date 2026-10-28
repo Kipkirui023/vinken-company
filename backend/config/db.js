@@ -31,6 +31,31 @@ pool.on("error", (error) => {
   console.error("Unexpected PostgreSQL pool error:", error.message);
 });
 
+function normalizePlaceholders(sql, params) {
+  let normalized = sql;
+  let paramIndex = 0;
+
+  normalized = normalized.replace(/\?/g, () => {
+    paramIndex += 1;
+    return `$${paramIndex}`;
+  });
+
+  return {
+    sql: normalized,
+    params,
+  };
+}
+
+function ensureReturningId(sql) {
+  const trimmed = sql.trim();
+
+  if (/^INSERT\s+INTO\s+/i.test(trimmed) && !/\bRETURNING\b/i.test(trimmed)) {
+    return `${trimmed} RETURNING id`;
+  }
+
+  return trimmed;
+}
+
 async function testConnection() {
   const result = await pool.query(
     `SELECT current_database() AS database, current_user AS username, NOW() AS connected_at`,
@@ -41,8 +66,25 @@ async function testConnection() {
 
 async function query(sql, params = []) {
   try {
-    const result = await pool.query(sql, params);
-    return [result.rows, result.fields];
+    const { sql: normalizedSql, params: normalizedParams } = normalizePlaceholders(
+      ensureReturningId(sql),
+      params,
+    );
+    const result = await pool.query(normalizedSql, normalizedParams);
+    const rows = Array.isArray(result.rows) ? result.rows : [];
+
+    const wrapped = {
+      rows,
+      fields: result.fields || [],
+      rowCount: result.rowCount ?? rows.length,
+      affectedRows: result.rowCount ?? rows.length,
+      insertId:
+        result.command === "INSERT" && rows.length > 0 && rows[0].id !== undefined
+          ? rows[0].id
+          : undefined,
+    };
+
+    return [wrapped, result.fields || []];
   } catch (error) {
     console.error("Database query error:", error.message);
     throw error;
