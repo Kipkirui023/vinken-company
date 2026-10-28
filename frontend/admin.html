@@ -1,0 +1,288 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#102638" />
+    <title>Admin Dashboard | Vinken Solutions Limited</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="css/admin.css" />
+    <script src="js/admin.js" defer></script>
+  </head>
+  <body class="admin-page">
+    <main class="login-screen" id="loginScreen">
+      <section class="login-card" aria-labelledby="loginTitle">
+        <a class="brand-lockup" href="index.html" aria-label="Vinken Solutions home">
+          <span class="brand-mark">V</span>
+          <span>VINKEN <strong>SOLUTIONS</strong></span>
+        </a>
+        <p class="eyebrow">ADMINISTRATION</p>
+        <h1 id="loginTitle">Welcome back</h1>
+        <p class="login-copy">Sign in with your administrator API key to manage your company.</p>
+        <form id="loginForm">
+          <label for="adminKey">Administrator API key</label>
+          <div class="input-with-icon">
+            <i class="bi bi-key" aria-hidden="true"></i>
+            <input
+              id="adminKey"
+              name="adminKey"
+              type="password"
+              autocomplete="current-password"
+              placeholder="Enter your API key"
+              required
+            />
+          </div>
+          <p class="form-error" id="loginError" role="alert" hidden></p>
+          <button class="button button-primary login-submit" id="loginSubmit" type="submit">
+            <span>Sign in</span>
+            <i class="bi bi-arrow-right" aria-hidden="true"></i>
+          </button>
+        </form>
+        <p class="login-footnote">
+          <i class="bi bi-shield-lock" aria-hidden="true"></i>
+          Your key is kept only for this browser session.
+        </p>
+        <a class="back-link" href="index.html"><i class="bi bi-arrow-left"></i> Back to website</a>
+      </section>
+      <div class="login-decoration" aria-hidden="true">
+        <div class="decoration-orbit orbit-one"></div>
+        <div class="decoration-orbit orbit-two"></div>
+        <div class="decoration-orbit orbit-three"></div>
+        <div class="decoration-caption">
+          <span>VINKEN SOLUTIONS LIMITED</span>
+          <strong>Procurement, made dependable.</strong>
+        </div>
+      </div>
+    </main>
+
+    <div class="app-shell" id="appShell" hidden>
+      <aside class="sidebar" id="sidebar">
+        <a class="sidebar-brand" href="index.html">
+          <span class="brand-mark">V</span>
+          <span>VINKEN <strong>SOLUTIONS</strong></span>
+        </a>
+        <div class="workspace-label">WORKSPACE</div>
+        <nav class="side-navigation" aria-label="Dashboard">
+          <button class="nav-item is-active" type="button" data-view="overview">
+            <i class="bi bi-grid-1x2" aria-hidden="true"></i><span>Overview</span>
+          </button>
+          <button class="nav-item" type="button" data-view="inquiries">
+            <i class="bi bi-chat-left-text" aria-hidden="true"></i><span>Inquiries</span>
+            <span class="nav-count" id="inquiryNavCount">0</span>
+          </button>
+          <button class="nav-item" type="button" data-view="quotations">
+            <i class="bi bi-file-earmark-text" aria-hidden="true"></i><span>Quote requests</span>
+            <span class="nav-count" id="quotationNavCount">0</span>
+          </button>
+          <button class="nav-item" type="button" data-view="catalogue">
+            <i class="bi bi-box-seam" aria-hidden="true"></i><span>Catalogue</span>
+          </button>
+        </nav>
+        <div class="sidebar-bottom">
+          <a class="website-link" href="index.html" target="_blank" rel="noopener noreferrer">
+            <i class="bi bi-box-arrow-up-right" aria-hidden="true"></i>
+            <span>View company website</span>
+          </a>
+          <div class="sidebar-user">
+            <span class="user-avatar">VS</span>
+            <span class="user-details"><strong>Administrator</strong><small>Vinken Solutions</small></span>
+            <i class="bi bi-shield-check user-shield" aria-label="Protected session"></i>
+          </div>
+        </div>
+      </aside>
+
+      <div class="dashboard-main">
+        <header class="topbar">
+          <button class="icon-button menu-toggle" id="menuToggle" type="button" aria-label="Toggle navigation" aria-expanded="false">
+            <i class="bi bi-list"></i>
+          </button>
+          <div class="breadcrumbs"><span>Workspace</span><i class="bi bi-chevron-right"></i><strong id="currentPage">Overview</strong></div>
+          <div class="topbar-actions">
+            <span class="today-label" id="todayLabel"></span>
+            <button class="icon-button" id="refreshButton" type="button" aria-label="Refresh dashboard" title="Refresh">
+              <i class="bi bi-arrow-clockwise"></i>
+            </button>
+            <button class="button button-quiet signout-button" id="signOutButton" type="button">
+              <i class="bi bi-box-arrow-right"></i><span>Sign out</span>
+            </button>
+          </div>
+        </header>
+
+        <div class="content-wrap">
+          <div class="notice" id="dashboardNotice" role="status" hidden></div>
+
+          <section class="view-section" id="view-overview">
+            <div class="page-heading">
+              <div>
+                <p class="eyebrow">YOUR BUSINESS AT A GLANCE</p>
+                <h1>Good to see you.</h1>
+                <p>Here’s what’s happening across Vinken Solutions today.</p>
+              </div>
+              <button class="button button-primary" type="button" data-view="inquiries">
+                <i class="bi bi-inbox"></i> View inbox
+              </button>
+            </div>
+
+            <div class="metrics-grid">
+              <article class="metric-card">
+                <div class="metric-top"><span class="metric-icon icon-blue"><i class="bi bi-chat-square-text"></i></span><span class="metric-caption">CUSTOMER MESSAGES</span></div>
+                <div class="metric-value" id="metricInquiries">—</div>
+                <div class="metric-foot"><span class="metric-dot dot-blue"></span><span id="metricNewInquiries">— new inquiries</span></div>
+              </article>
+              <article class="metric-card">
+                <div class="metric-top"><span class="metric-icon icon-teal"><i class="bi bi-file-earmark-check"></i></span><span class="metric-caption">QUOTE REQUESTS</span></div>
+                <div class="metric-value" id="metricQuotations">—</div>
+                <div class="metric-foot"><span class="metric-dot dot-teal"></span><span id="metricOpenQuotes">— need attention</span></div>
+              </article>
+              <article class="metric-card">
+                <div class="metric-top"><span class="metric-icon icon-violet"><i class="bi bi-box-seam"></i></span><span class="metric-caption">PRODUCTS</span></div>
+                <div class="metric-value" id="metricProducts">—</div>
+                <div class="metric-foot"><span class="metric-dot dot-violet"></span><span>In your catalogue</span></div>
+              </article>
+              <article class="metric-card">
+                <div class="metric-top"><span class="metric-icon icon-orange"><i class="bi bi-briefcase"></i></span><span class="metric-caption">SERVICES</span></div>
+                <div class="metric-value" id="metricServices">—</div>
+                <div class="metric-foot"><span class="metric-dot dot-orange"></span><span>Available to customers</span></div>
+              </article>
+            </div>
+
+            <div class="overview-grid">
+              <article class="panel activity-panel">
+                <div class="panel-heading">
+                  <div><h2>Quote activity</h2><p>Requests received over the last six months</p></div>
+                  <span class="panel-badge"><i class="bi bi-activity"></i> Activity</span>
+                </div>
+                <div class="chart" id="quoteChart" aria-label="Quote requests over the last six months"></div>
+              </article>
+              <article class="panel status-panel">
+                <div class="panel-heading">
+                  <div><h2>Request status</h2><p>Quote request pipeline</p></div>
+                </div>
+                <div class="status-summary" id="statusSummary"></div>
+              </article>
+            </div>
+
+            <article class="panel recent-panel">
+              <div class="panel-heading">
+                <div><h2>Recent inquiries</h2><p>The latest messages from your customers</p></div>
+                <button class="text-button" type="button" data-view="inquiries">View all <i class="bi bi-arrow-right"></i></button>
+              </div>
+              <div class="table-wrap">
+                <table>
+                  <thead><tr><th>CONTACT</th><th>SUBJECT</th><th>RECEIVED</th><th>STATUS</th><th></th></tr></thead>
+                  <tbody id="recentInquiries"></tbody>
+                </table>
+              </div>
+            </article>
+          </section>
+
+          <section class="view-section" id="view-inquiries" hidden>
+            <div class="page-heading">
+              <div><p class="eyebrow">CUSTOMER COMMUNICATION</p><h1>Inquiries</h1><p>Messages and questions sent through your company website.</p></div>
+              <span class="heading-total" id="inquiryTotal">0 messages</span>
+            </div>
+            <article class="panel table-panel">
+              <div class="table-toolbar">
+                <div class="table-title"><h2>All inquiries</h2><p>Review and follow up with your customers.</p></div>
+                <div class="toolbar-controls">
+                  <label class="search-field"><i class="bi bi-search"></i><input id="inquirySearch" type="search" placeholder="Search inquiries" aria-label="Search inquiries" /></label>
+                  <select class="filter-select" id="inquiryStatusFilter" aria-label="Filter inquiries by status">
+                    <option value="all">All statuses</option><option value="new">New</option><option value="read">Read</option><option value="replied">Replied</option><option value="closed">Closed</option>
+                  </select>
+                </div>
+              </div>
+              <div class="table-wrap">
+                <table>
+                  <thead><tr><th>CONTACT</th><th>SUBJECT</th><th>MESSAGE</th><th>RECEIVED</th><th>STATUS</th><th></th></tr></thead>
+                  <tbody id="inquiriesTable"></tbody>
+                </table>
+              </div>
+              <div class="table-empty" id="inquiriesEmpty" hidden><span class="empty-icon"><i class="bi bi-inbox"></i></span><strong>No inquiries found</strong><span>Try adjusting your search or filters.</span></div>
+            </article>
+          </section>
+
+          <section class="view-section" id="view-quotations" hidden>
+            <div class="page-heading">
+              <div><p class="eyebrow">SALES PIPELINE</p><h1>Quote requests</h1><p>Track customer requirements and move each request forward.</p></div>
+              <span class="heading-total" id="quotationTotal">0 requests</span>
+            </div>
+            <article class="panel table-panel">
+              <div class="table-toolbar">
+                <div class="table-title"><h2>All requests</h2><p>Update a status as the request progresses.</p></div>
+                <div class="toolbar-controls">
+                  <label class="search-field"><i class="bi bi-search"></i><input id="quotationSearch" type="search" placeholder="Search requests" aria-label="Search quote requests" /></label>
+                  <select class="filter-select" id="quotationStatusFilter" aria-label="Filter quote requests by status">
+                    <option value="all">All statuses</option><option value="new">New</option><option value="reviewing">Reviewing</option><option value="quoted">Quoted</option><option value="completed">Completed</option><option value="cancelled">Cancelled</option>
+                  </select>
+                </div>
+              </div>
+              <div class="table-wrap">
+                <table>
+                  <thead><tr><th>CUSTOMER</th><th>REQUIREMENT</th><th>TYPE</th><th>RECEIVED</th><th>STATUS</th><th></th></tr></thead>
+                  <tbody id="quotationsTable"></tbody>
+                </table>
+              </div>
+              <div class="table-empty" id="quotationsEmpty" hidden><span class="empty-icon"><i class="bi bi-file-earmark"></i></span><strong>No requests found</strong><span>Try adjusting your search or filters.</span></div>
+            </article>
+          </section>
+
+          <section class="view-section" id="view-catalogue" hidden>
+            <div class="page-heading">
+              <div><p class="eyebrow">YOUR PUBLIC OFFERING</p><h1>Catalogue</h1><p>Manage the products and services displayed on your website.</p></div>
+            </div>
+            <div class="catalogue-tabs" role="tablist" aria-label="Catalogue type">
+              <button class="catalogue-tab is-active" type="button" role="tab" aria-selected="true" data-catalogue-tab="products"><i class="bi bi-box-seam"></i> Products <span id="productTabCount">0</span></button>
+              <button class="catalogue-tab" type="button" role="tab" aria-selected="false" data-catalogue-tab="services"><i class="bi bi-briefcase"></i> Services <span id="serviceTabCount">0</span></button>
+            </div>
+            <article class="panel catalogue-panel" id="productsCatalogue">
+              <div class="catalogue-heading"><div><h2>Products</h2><p>Items your customers can request a quote for.</p></div></div>
+              <form class="catalogue-form" id="productForm">
+                <div class="form-title"><span class="form-title-icon"><i class="bi bi-plus-lg"></i></span><div><strong>Add a product</strong><small>New products appear in your public catalogue.</small></div></div>
+                <div class="form-grid">
+                  <div class="field"><label for="productName">Product name <span>*</span></label><input id="productName" name="name" required maxlength="200" placeholder="e.g. Office stationery" /></div>
+                  <div class="field"><label for="productCategory">Category ID</label><input id="productCategory" name="category_id" type="number" min="1" placeholder="Optional" /></div>
+                  <div class="field field-wide"><label for="productDescription">Description</label><textarea id="productDescription" name="description" rows="2" placeholder="Describe this product"></textarea></div>
+                  <div class="field field-wide"><label for="productSpecifications">Specifications</label><textarea id="productSpecifications" name="specifications" rows="2" placeholder="Key details, sizes or specifications"></textarea></div>
+                  <div class="field field-wide"><label for="productImage">Image URL</label><input id="productImage" name="image" type="url" placeholder="https://example.com/image.jpg" /></div>
+                </div>
+                <div class="form-actions"><span class="form-feedback" id="productFeedback" role="status"></span><button class="button button-primary" type="submit"><i class="bi bi-plus-lg"></i> Add product</button></div>
+              </form>
+              <div class="catalogue-list-heading"><h3>Current products</h3><span id="productListCount">0 items</span></div>
+              <div class="catalogue-list" id="productList"></div>
+              <div class="catalogue-empty" id="productsEmpty" hidden>No products to display yet. Add your first product above.</div>
+            </article>
+            <article class="panel catalogue-panel" id="servicesCatalogue" hidden>
+              <div class="catalogue-heading"><div><h2>Services</h2><p>Services featured on your company website.</p></div></div>
+              <form class="catalogue-form" id="serviceForm">
+                <div class="form-title"><span class="form-title-icon"><i class="bi bi-plus-lg"></i></span><div><strong>Add a service</strong><small>New services appear in your public catalogue.</small></div></div>
+                <div class="form-grid">
+                  <div class="field field-wide"><label for="serviceName">Service name <span>*</span></label><input id="serviceName" name="name" required maxlength="200" placeholder="e.g. Procurement and sourcing" /></div>
+                  <div class="field field-wide"><label for="serviceDescription">Description</label><textarea id="serviceDescription" name="description" rows="3" placeholder="Describe this service"></textarea></div>
+                  <div class="field field-wide"><label for="serviceImage">Image URL</label><input id="serviceImage" name="image" type="url" placeholder="https://example.com/image.jpg" /></div>
+                </div>
+                <div class="form-actions"><span class="form-feedback" id="serviceFeedback" role="status"></span><button class="button button-primary" type="submit"><i class="bi bi-plus-lg"></i> Add service</button></div>
+              </form>
+              <div class="catalogue-list-heading"><h3>Current services</h3><span id="serviceListCount">0 items</span></div>
+              <div class="catalogue-list" id="serviceList"></div>
+              <div class="catalogue-empty" id="servicesEmpty" hidden>No services to display yet. Add your first service above.</div>
+            </article>
+          </section>
+
+          <footer class="dashboard-footer"><span>Vinken Solutions Limited</span><span>Administrator workspace</span></footer>
+        </div>
+      </div>
+    </div>
+
+    <dialog class="detail-dialog" id="detailDialog">
+      <div class="dialog-top"><span class="dialog-icon"><i class="bi bi-chat-square-text"></i></span><button class="icon-button" id="closeDialog" type="button" aria-label="Close details"><i class="bi bi-x-lg"></i></button></div>
+      <p class="eyebrow" id="dialogEyebrow">INQUIRY DETAILS</p>
+      <h2 id="dialogTitle">Inquiry</h2>
+      <dl class="detail-list" id="dialogDetails"></dl>
+      <div class="dialog-actions"><button class="button button-quiet" id="dialogDone" type="button">Close</button></div>
+    </dialog>
+    <div class="sidebar-scrim" id="sidebarScrim"></div>
+  </body>
+</html>
