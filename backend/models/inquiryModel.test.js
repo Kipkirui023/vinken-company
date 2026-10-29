@@ -80,6 +80,70 @@ test("legacy inquiry schema inserts without customer_id", withLegacyInquirySchem
   ]);
 }));
 
+test("mixed inquiry schema inserts both customer_id and required contact fields", withLegacyInquirySchema(async (queryHistory) => {
+  db.query = async (sql, params = []) => {
+    queryHistory.push({ sql, params });
+
+    if (sql.includes("information_schema.columns")) {
+      return [[
+        { column_name: "id" },
+        { column_name: "customer_id" },
+        { column_name: "name" },
+        { column_name: "email" },
+        { column_name: "phone" },
+        { column_name: "subject" },
+        { column_name: "message" },
+        { column_name: "status" },
+        { column_name: "created_at" },
+      ]];
+    }
+
+    if (sql.includes("INSERT INTO inquiries")) {
+      return [{ insertId: 99, affectedRows: 1, rowCount: 1 }, []];
+    }
+
+    if (sql.includes("FROM inquiries")) {
+      return [[{
+        id: 99,
+        contact_person: "Customer User",
+        email: "customer@example.com",
+        phone: "0712345678",
+        subject: "General",
+        message: "Customer message",
+        status: "new",
+        organization_name: "Acme Ltd",
+        created_at: "2024-01-01T00:00:00.000Z",
+      }], []];
+    }
+
+    throw new Error(`Unexpected query: ${sql}`);
+  };
+
+  const inquiryId = await inquiryModel.createInquiry({
+    customer_id: 2,
+    contact_person: "Customer User",
+    email: "customer@example.com",
+    phone: "0712345678",
+    subject: "General",
+    message: "Customer message",
+  });
+
+  assert.equal(inquiryId, 99);
+
+  const insertCall = queryHistory.find((entry) =>
+    entry.sql.includes("INSERT INTO inquiries")
+  );
+  assert.ok(insertCall);
+  assert.deepEqual(insertCall.params, [
+    2,
+    "Customer User",
+    "customer@example.com",
+    "0712345678",
+    "General",
+    "Customer message",
+  ]);
+}));
+
 test("legacy inquiry schema reads rows without customer joins", withLegacyInquirySchema(async () => {
   const rows = await inquiryModel.getAllInquiries();
 

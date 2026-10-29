@@ -28,43 +28,48 @@ async function createInquiry(inquiryData) {
   } = inquiryData;
 
   const inquiryColumns = await getInquiryColumns();
+  const hasCustomerId = inquiryColumns.has("customer_id");
+  const hasContactName = inquiryColumns.has("name");
+  const hasEmail = inquiryColumns.has("email");
+  const hasPhone = inquiryColumns.has("phone");
 
-  if (inquiryColumns.has("customer_id")) {
-    const [result] = await db.query(
-      `
-          INSERT INTO inquiries
-          (
-              customer_id,
-              subject,
-              message
-          )
-          VALUES (?, ?, ?)
-          `,
-      [customer_id ?? null, subject || "General Inquiry", message],
-    );
+  const insertColumns = [];
+  const insertValues = [];
 
-    return result.insertId;
+  if (hasCustomerId) {
+    insertColumns.push("customer_id");
+    insertValues.push(customer_id ?? null);
   }
 
+  if (hasContactName) {
+    insertColumns.push("name");
+    insertValues.push(contact_person || "Unknown contact");
+  }
+
+  if (hasEmail) {
+    insertColumns.push("email");
+    insertValues.push(email || null);
+  }
+
+  if (hasPhone) {
+    insertColumns.push("phone");
+    insertValues.push(phone || null);
+  }
+
+  insertColumns.push("subject");
+  insertValues.push(subject || "General Inquiry");
+
+  insertColumns.push("message");
+  insertValues.push(message);
+
+  if (insertColumns.length === 0) {
+    throw new Error("Unsupported inquiry schema: no insertable message fields found.");
+  }
+
+  const placeholders = insertColumns.map(() => "?").join(", ");
   const [result] = await db.query(
-    `
-        INSERT INTO inquiries
-        (
-            name,
-            email,
-            phone,
-            subject,
-            message
-        )
-        VALUES (?, ?, ?, ?, ?)
-        `,
-    [
-      contact_person || null,
-      email || null,
-      phone || null,
-      subject || "General Inquiry",
-      message,
-    ],
+    `INSERT INTO inquiries (${insertColumns.join(", ")}) VALUES (${placeholders})`,
+    insertValues,
   );
 
   return result.insertId;
@@ -76,8 +81,10 @@ async function createInquiry(inquiryData) {
 
 async function getAllInquiries() {
   const inquiryColumns = await getInquiryColumns();
+  const hasCustomerId = inquiryColumns.has("customer_id");
+  const hasLegacyContactFields = inquiryColumns.has("name") && inquiryColumns.has("email");
 
-  if (inquiryColumns.has("customer_id")) {
+  if (hasCustomerId) {
     const [rows] = await db.query(
       `
           SELECT
@@ -86,11 +93,10 @@ async function getAllInquiries() {
               inquiries.message,
               inquiries.status,
               inquiries.created_at,
-
               customers.organization_name,
-              customers.contact_person,
-              customers.email,
-              customers.phone
+              COALESCE(customers.contact_person, inquiries.name) AS contact_person,
+              COALESCE(customers.email, inquiries.email) AS email,
+              COALESCE(customers.phone, inquiries.phone) AS phone
 
           FROM inquiries
 
@@ -132,8 +138,9 @@ async function getAllInquiries() {
 
 async function getInquiryById(id) {
   const inquiryColumns = await getInquiryColumns();
+  const hasCustomerId = inquiryColumns.has("customer_id");
 
-  if (inquiryColumns.has("customer_id")) {
+  if (hasCustomerId) {
     const [rows] = await db.query(
       `
           SELECT
@@ -142,11 +149,10 @@ async function getInquiryById(id) {
               inquiries.message,
               inquiries.status,
               inquiries.created_at,
-
               customers.organization_name,
-              customers.contact_person,
-              customers.email,
-              customers.phone
+              COALESCE(customers.contact_person, inquiries.name) AS contact_person,
+              COALESCE(customers.email, inquiries.email) AS email,
+              COALESCE(customers.phone, inquiries.phone) AS phone
 
           FROM inquiries
 
