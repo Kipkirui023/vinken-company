@@ -78,6 +78,37 @@ app.use("/api", (req, res) => {
   });
 });
 
+async function initializeCustomerAuthSchema() {
+  try {
+    await db.query(
+      "ALTER TABLE customers ADD COLUMN IF NOT EXISTS password_hash VARCHAR(255)",
+    );
+
+    const [duplicateRows] = await db.query(`
+      SELECT email
+      FROM customers
+      WHERE email IS NOT NULL
+      GROUP BY email
+      HAVING COUNT(*) > 1
+      LIMIT 1
+    `);
+
+    if (duplicateRows.length === 0) {
+      await db.query(
+        "CREATE UNIQUE INDEX IF NOT EXISTS customers_email_unique ON customers(email)",
+      );
+    } else {
+      console.warn(
+        "Skipping unique customer email index because duplicate email values already exist.",
+      );
+    }
+  } catch (error) {
+    console.warn("Customer auth schema migration skipped:", error.message);
+  }
+}
+
+initializeCustomerAuthSchema();
+
 app.listen(PORT, "0.0.0.0", () => {
   console.log(`Vinken Solutions website and API running on port ${PORT}`);
 });

@@ -17,6 +17,22 @@ async function getCustomerByEmail(email) {
 // CREATE CUSTOMER
 // ========================================
 
+async function hasColumn(tableName, columnName) {
+  const [rows] = await db.query(
+    `
+      SELECT 1
+      FROM information_schema.columns
+      WHERE table_schema = current_schema()
+        AND table_name = ?
+        AND column_name = ?
+      LIMIT 1
+    `,
+    [tableName, columnName],
+  );
+
+  return rows.length > 0;
+}
+
 async function createCustomer(customerData) {
   const {
     organization_name,
@@ -27,23 +43,34 @@ async function createCustomer(customerData) {
     password_hash,
   } = customerData;
 
+  const hasPasswordHash = await hasColumn("customers", "password_hash");
+  const columns = [
+    "organization_name",
+    "contact_person",
+    "email",
+    "phone",
+    "address",
+  ];
+  const values = [organization_name, contact_person, email, phone, address];
+
+  if (hasPasswordHash && password_hash) {
+    columns.push("password_hash");
+    values.push(password_hash);
+  }
+
   const [result] = await db.query(
     `
         INSERT INTO customers
         (
-            organization_name,
-            contact_person,
-            email,
-            phone,
-            address,
-            password_hash
+            ${columns.join(", ")}
         )
-        VALUES (?, ?, ?, ?, ?, ?)
+        VALUES (${columns.map(() => "?").join(", ")})
+        RETURNING id
         `,
-    [organization_name, contact_person, email, phone, address, password_hash],
+    values,
   );
 
-  return result.insertId;
+  return result.insertId ?? result.rows?.[0]?.id;
 }
 
 // ========================================
