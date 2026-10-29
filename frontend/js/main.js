@@ -1,6 +1,8 @@
 const API_URL = "/api";
 
 document.addEventListener("DOMContentLoaded", () => {
+  initMobileNavigation();
+
   if (document.getElementById("products-container")) {
     loadProducts();
   }
@@ -76,6 +78,42 @@ document.addEventListener("DOMContentLoaded", () => {
     .querySelectorAll('input[type="date"]')
     .forEach((input) => input.setAttribute("min", localDate));
 });
+
+function initMobileNavigation() {
+  const toggles = document.querySelectorAll(".navbar-toggler");
+
+  toggles.forEach((toggle) => {
+    const targetSelector = toggle.getAttribute("data-bs-target");
+    if (!targetSelector) return;
+
+    const collapse = document.querySelector(targetSelector);
+    if (!collapse) return;
+
+    toggle.addEventListener("click", (event) => {
+      event.stopPropagation();
+      const isExpanded = toggle.getAttribute("aria-expanded") === "true";
+      toggle.setAttribute("aria-expanded", String(!isExpanded));
+      collapse.classList.toggle("show", !isExpanded);
+    });
+  });
+
+  document.addEventListener("click", (event) => {
+    const openMenu = document.querySelector(".navbar-collapse.show");
+    if (!openMenu) return;
+
+    const toggle = document.querySelector(
+      `[data-bs-target="#${openMenu.id}"]`,
+    );
+    const clickedInside =
+      openMenu.contains(event.target) ||
+      (toggle && toggle.contains(event.target));
+
+    if (!clickedInside) {
+      openMenu.classList.remove("show");
+      if (toggle) toggle.setAttribute("aria-expanded", "false");
+    }
+  });
+}
 
 function quotationPayload(fields) {
   return {
