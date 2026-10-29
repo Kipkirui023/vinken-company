@@ -42,18 +42,26 @@ async function createInquiry(inquiryData) {
   }
 
   if (hasContactName) {
+    const contactName = String(contact_person || "").trim();
+    if (!contactName) {
+      throw new Error("Contact person is required.");
+    }
     insertColumns.push("name");
-    insertValues.push(contact_person || "Unknown contact");
+    insertValues.push(contactName);
   }
 
   if (hasEmail) {
+    const normalizedEmail = String(email || "").trim();
+    if (!normalizedEmail) {
+      throw new Error("Email address is required.");
+    }
     insertColumns.push("email");
-    insertValues.push(email || null);
+    insertValues.push(normalizedEmail);
   }
 
   if (hasPhone) {
     insertColumns.push("phone");
-    insertValues.push(phone || null);
+    insertValues.push(phone ? String(phone).trim() : null);
   }
 
   insertColumns.push("subject");

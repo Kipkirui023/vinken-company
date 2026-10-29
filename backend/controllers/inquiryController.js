@@ -17,30 +17,44 @@ async function createInquiry(req, res) {
       message,
     } = req.body;
 
+    const normalizedContactPerson = String(contact_person || "").trim();
+    const normalizedEmail = String(email || "").trim();
+    const normalizedMessage = String(message || "").trim();
+
     // ========================================
     // VALIDATION
     // ========================================
 
-    if (!contact_person) {
+    if (!normalizedContactPerson) {
       return res.status(400).json({
         success: false,
         message: "Contact person is required.",
       });
     }
 
-    if (!email) {
+    if (!normalizedEmail) {
       return res.status(400).json({
         success: false,
         message: "Email address is required.",
       });
     }
 
-    if (!message) {
+    if (!normalizedMessage) {
       return res.status(400).json({
         success: false,
         message: "Message is required.",
       });
     }
+
+    const safePayload = {
+      organization_name: organization_name ? String(organization_name).trim() : null,
+      contact_person: normalizedContactPerson,
+      email: normalizedEmail,
+      phone: phone ? String(phone).trim() : null,
+      address: address ? String(address).trim() : null,
+      subject: subject ? String(subject).trim() : "General Inquiry",
+      message: normalizedMessage,
+    };
 
     // ========================================
     // CHECK IF CUSTOMER ALREADY EXISTS
@@ -56,15 +70,15 @@ async function createInquiry(req, res) {
 
     if (!customer) {
       customerId = await customerModel.createCustomer({
-        organization_name: organization_name || null,
+        organization_name: safePayload.organization_name,
 
-        contact_person,
+        contact_person: safePayload.contact_person,
 
-        email,
+        email: safePayload.email,
 
-        phone: phone || null,
+        phone: safePayload.phone,
 
-        address: address || null,
+        address: safePayload.address,
       });
     } else {
       customerId = customer.id;
@@ -77,9 +91,11 @@ async function createInquiry(req, res) {
     const inquiryId = await inquiryModel.createInquiry({
       customer_id: customerId,
 
-      subject: subject || "General Inquiry",
-
-      message,
+      contact_person: safePayload.contact_person,
+      email: safePayload.email,
+      phone: safePayload.phone,
+      subject: safePayload.subject,
+      message: safePayload.message,
     });
 
     // ========================================

@@ -15,13 +15,15 @@ document.addEventListener("DOMContentLoaded", () => {
       "Thank you. Your message has been received and our team will be in touch.",
     getPayload: (form) => {
       const fields = new FormData(form);
+      const normalize = (value) => (typeof value === "string" ? value.trim() : "");
+
       return {
-        organization_name: fields.get("organization"),
-        contact_person: fields.get("name"),
-        email: fields.get("email"),
-        phone: fields.get("phone"),
-        subject: fields.get("subject"),
-        message: fields.get("message"),
+        organization_name: normalize(fields.get("organization")),
+        contact_person: normalize(fields.get("name")),
+        email: normalize(fields.get("email")),
+        phone: normalize(fields.get("phone")),
+        subject: normalize(fields.get("subject")),
+        message: normalize(fields.get("message")),
       };
     },
   });
