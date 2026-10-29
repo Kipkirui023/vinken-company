@@ -14,16 +14,18 @@ function withLegacyInquirySchema(testFn) {
       queryHistory.push({ sql, params });
 
       if (sql.includes("information_schema.columns")) {
-        return [[
-          { column_name: "id" },
-          { column_name: "name" },
-          { column_name: "email" },
-          { column_name: "phone" },
-          { column_name: "subject" },
-          { column_name: "message" },
-          { column_name: "status" },
-          { column_name: "created_at" },
-        ]];
+        return [
+          [
+            { column_name: "id" },
+            { column_name: "name" },
+            { column_name: "email" },
+            { column_name: "phone" },
+            { column_name: "subject" },
+            { column_name: "message" },
+            { column_name: "status" },
+            { column_name: "created_at" },
+          ],
+        ];
       }
 
       if (sql.includes("INSERT INTO inquiries")) {
@@ -31,17 +33,22 @@ function withLegacyInquirySchema(testFn) {
       }
 
       if (sql.includes("FROM inquiries")) {
-        return [[{
-          id: 42,
-          contact_person: "Legacy User",
-          email: "legacy@example.com",
-          phone: "0712345678",
-          subject: "General",
-          message: "Legacy message",
-          status: "new",
-          organization_name: null,
-          created_at: "2024-01-01T00:00:00.000Z",
-        }], []];
+        return [
+          [
+            {
+              id: 42,
+              contact_person: "Legacy User",
+              email: "legacy@example.com",
+              phone: "0712345678",
+              subject: "General",
+              message: "Legacy message",
+              status: "new",
+              organization_name: null,
+              created_at: "2024-01-01T00:00:00.000Z",
+            },
+          ],
+          [],
+        ];
       }
 
       throw new Error(`Unexpected query: ${sql}`);
@@ -55,99 +62,115 @@ function withLegacyInquirySchema(testFn) {
   };
 }
 
-test("legacy inquiry schema inserts without customer_id", withLegacyInquirySchema(async (queryHistory) => {
-  const inquiryId = await inquiryModel.createInquiry({
-    customer_id: null,
-    contact_person: "Legacy User",
-    email: "legacy@example.com",
-    phone: "0712345678",
-    subject: "General",
-    message: "Legacy message",
-  });
+test(
+  "legacy inquiry schema inserts without customer_id",
+  withLegacyInquirySchema(async (queryHistory) => {
+    const inquiryId = await inquiryModel.createInquiry({
+      customer_id: null,
+      contact_person: "Legacy User",
+      email: "legacy@example.com",
+      phone: "0712345678",
+      subject: "General",
+      message: "Legacy message",
+    });
 
-  assert.equal(inquiryId, 42);
+    assert.equal(inquiryId, 42);
 
-  const insertCall = queryHistory.find((entry) =>
-    entry.sql.includes("INSERT INTO inquiries")
-  );
-  assert.ok(insertCall);
-  assert.deepEqual(insertCall.params, [
-    "Legacy User",
-    "legacy@example.com",
-    "0712345678",
-    "General",
-    "Legacy message",
-  ]);
-}));
+    const insertCall = queryHistory.find((entry) =>
+      entry.sql.includes("INSERT INTO inquiries"),
+    );
+    assert.ok(insertCall);
+    assert.deepEqual(insertCall.params, [
+      "Legacy User",
+      "legacy@example.com",
+      "0712345678",
+      "General",
+      "Legacy message",
+    ]);
+  }),
+);
 
-test("mixed inquiry schema inserts both customer_id and required contact fields", withLegacyInquirySchema(async (queryHistory) => {
-  db.query = async (sql, params = []) => {
-    queryHistory.push({ sql, params });
+test(
+  "mixed inquiry schema inserts both customer_id and required contact fields",
+  withLegacyInquirySchema(async (queryHistory) => {
+    db.query = async (sql, params = []) => {
+      queryHistory.push({ sql, params });
 
-    if (sql.includes("information_schema.columns")) {
-      return [[
-        { column_name: "id" },
-        { column_name: "customer_id" },
-        { column_name: "name" },
-        { column_name: "email" },
-        { column_name: "phone" },
-        { column_name: "subject" },
-        { column_name: "message" },
-        { column_name: "status" },
-        { column_name: "created_at" },
-      ]];
-    }
+      if (sql.includes("information_schema.columns")) {
+        return [
+          [
+            { column_name: "id" },
+            { column_name: "customer_id" },
+            { column_name: "name" },
+            { column_name: "email" },
+            { column_name: "phone" },
+            { column_name: "subject" },
+            { column_name: "message" },
+            { column_name: "status" },
+            { column_name: "created_at" },
+          ],
+        ];
+      }
 
-    if (sql.includes("INSERT INTO inquiries")) {
-      return [{ insertId: 99, affectedRows: 1, rowCount: 1 }, []];
-    }
+      if (sql.includes("INSERT INTO inquiries")) {
+        return [{ insertId: 99, affectedRows: 1, rowCount: 1 }, []];
+      }
 
-    if (sql.includes("FROM inquiries")) {
-      return [[{
-        id: 99,
-        contact_person: "Customer User",
-        email: "customer@example.com",
-        phone: "0712345678",
-        subject: "General",
-        message: "Customer message",
-        status: "new",
-        organization_name: "Acme Ltd",
-        created_at: "2024-01-01T00:00:00.000Z",
-      }], []];
-    }
+      if (sql.includes("FROM inquiries")) {
+        return [
+          [
+            {
+              id: 99,
+              contact_person: "Customer User",
+              email: "customer@example.com",
+              phone: "0712345678",
+              subject: "General",
+              message: "Customer message",
+              status: "new",
+              organization_name: "Acme Ltd",
+              created_at: "2024-01-01T00:00:00.000Z",
+            },
+          ],
+          [],
+        ];
+      }
 
-    throw new Error(`Unexpected query: ${sql}`);
-  };
+      throw new Error(`Unexpected query: ${sql}`);
+    };
 
-  const inquiryId = await inquiryModel.createInquiry({
-    customer_id: 2,
-    contact_person: "Customer User",
-    email: "customer@example.com",
-    phone: "0712345678",
-    subject: "General",
-    message: "Customer message",
-  });
+    const inquiryId = await inquiryModel.createInquiry({
+      customer_id: 2,
+      contact_person: "Customer User",
+      email: "customer@example.com",
+      phone: "0712345678",
+      subject: "General",
+      message: "Customer message",
+    });
 
-  assert.equal(inquiryId, 99);
+    assert.equal(inquiryId, 99);
 
-  const insertCall = queryHistory.find((entry) =>
-    entry.sql.includes("INSERT INTO inquiries")
-  );
-  assert.ok(insertCall);
-  assert.deepEqual(insertCall.params, [
-    2,
-    "Customer User",
-    "customer@example.com",
-    "0712345678",
-    "General",
-    "Customer message",
-  ]);
-}));
+    const insertCall = queryHistory.find((entry) =>
+      entry.sql.includes("INSERT INTO inquiries"),
+    );
+    assert.ok(insertCall);
+    assert.deepEqual(insertCall.params, [
+      2,
+      "Customer User",
+      "customer@example.com",
+      "0712345678",
+      "General",
+      "Customer message",
+    ]);
+  }),
+);
 
-test("legacy inquiry schema reads rows without customer joins", withLegacyInquirySchema(async () => {
-  const rows = await inquiryModel.getAllInquiries();
+test(
+  "legacy inquiry schema reads rows without customer joins",
+  withLegacyInquirySchema(async () => {
+    const rows = await inquiryModel.getAllInquiries();
 
-  assert.equal(rows.length, 1);
-  assert.equal(rows[0].contact_person, "Legacy User");
-  assert.equal(rows[0].organization_name, null);
-}));
+    assert.equal(rows.length, 1);
+    assert.equal(rows[0].contact_person, "Legacy User");
+    assert.equal(rows[0].organization_name, null);
+  }),
+);

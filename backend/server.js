@@ -8,6 +8,7 @@ const productRoutes = require("./routes/productRoutes");
 const serviceRoutes = require("./routes/serviceRoutes");
 const inquiryRoutes = require("./routes/inquiryRoutes");
 const quotationRoutes = require("./routes/quotationRoutes");
+const authRoutes = require("./routes/authRoutes");
 
 const app = express();
 
@@ -62,6 +63,7 @@ app.get("/api/db-test", async (req, res) => {
   }
 });
 
+app.use("/api/auth", authRoutes);
 app.use("/api/products", productRoutes);
 app.use("/api/services", serviceRoutes);
 app.use("/api/inquiries", inquiryRoutes);

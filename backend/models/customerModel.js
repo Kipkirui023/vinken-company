@@ -18,8 +18,14 @@ async function getCustomerByEmail(email) {
 // ========================================
 
 async function createCustomer(customerData) {
-  const { organization_name, contact_person, email, phone, address } =
-    customerData;
+  const {
+    organization_name,
+    contact_person,
+    email,
+    phone,
+    address,
+    password_hash,
+  } = customerData;
 
   const [result] = await db.query(
     `
@@ -29,11 +35,12 @@ async function createCustomer(customerData) {
             contact_person,
             email,
             phone,
-            address
+            address,
+            password_hash
         )
-        VALUES (?, ?, ?, ?, ?)
+        VALUES (?, ?, ?, ?, ?, ?)
         `,
-    [organization_name, contact_person, email, phone, address],
+    [organization_name, contact_person, email, phone, address, password_hash],
   );
 
   return result.insertId;

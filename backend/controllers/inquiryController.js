@@ -47,7 +47,9 @@ async function createInquiry(req, res) {
     }
 
     const safePayload = {
-      organization_name: organization_name ? String(organization_name).trim() : null,
+      organization_name: organization_name
+        ? String(organization_name).trim()
+        : null,
       contact_person: normalizedContactPerson,
       email: normalizedEmail,
       phone: phone ? String(phone).trim() : null,

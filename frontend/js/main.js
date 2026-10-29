@@ -15,7 +15,8 @@ document.addEventListener("DOMContentLoaded", () => {
       "Thank you. Your message has been received and our team will be in touch.",
     getPayload: (form) => {
       const fields = new FormData(form);
-      const normalize = (value) => (typeof value === "string" ? value.trim() : "");
+      const normalize = (value) =>
+        typeof value === "string" ? value.trim() : "";
 
       return {
         organization_name: normalize(fields.get("organization")),
@@ -60,7 +61,9 @@ document.addEventListener("DOMContentLoaded", () => {
   document
     .querySelectorAll(".footer-bottom p, footer .text-center p")
     .forEach((element) => {
-      element.textContent = element.textContent.replace(/©|&copy;|©/g, "©").replace(/\b20\d{2}\b/, year);
+      element.textContent = element.textContent
+        .replace(/©|&copy;|©/g, "©")
+        .replace(/\b20\d{2}\b/, year);
     });
 
   const today = new Date();
@@ -125,7 +128,9 @@ function renderProducts(container, products) {
     if (imageUrl) {
       const image = document.createElement("img");
       image.src = imageUrl;
-      image.alt = product.name ? `${product.name} product image` : "Product image";
+      image.alt = product.name
+        ? `${product.name} product image`
+        : "Product image";
       image.loading = "lazy";
       imageWrap.append(image);
     } else {

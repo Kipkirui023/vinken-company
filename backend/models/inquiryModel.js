@@ -18,14 +18,8 @@ async function getInquiryColumns() {
 // ========================================
 
 async function createInquiry(inquiryData) {
-  const {
-    customer_id,
-    contact_person,
-    email,
-    phone,
-    subject,
-    message,
-  } = inquiryData;
+  const { customer_id, contact_person, email, phone, subject, message } =
+    inquiryData;
 
   const inquiryColumns = await getInquiryColumns();
   const hasCustomerId = inquiryColumns.has("customer_id");
@@ -71,7 +65,9 @@ async function createInquiry(inquiryData) {
   insertValues.push(message);
 
   if (insertColumns.length === 0) {
-    throw new Error("Unsupported inquiry schema: no insertable message fields found.");
+    throw new Error(
+      "Unsupported inquiry schema: no insertable message fields found.",
+    );
   }
 
   const placeholders = insertColumns.map(() => "?").join(", ");
@@ -90,7 +86,8 @@ async function createInquiry(inquiryData) {
 async function getAllInquiries() {
   const inquiryColumns = await getInquiryColumns();
   const hasCustomerId = inquiryColumns.has("customer_id");
-  const hasLegacyContactFields = inquiryColumns.has("name") && inquiryColumns.has("email");
+  const hasLegacyContactFields =
+    inquiryColumns.has("name") && inquiryColumns.has("email");
 
   if (hasCustomerId) {
     const [rows] = await db.query(
