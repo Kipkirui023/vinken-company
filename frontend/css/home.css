@@ -1,11 +1,11 @@
 .hero {
-  min-height: 82vh;
-  padding-top: 7rem;
-  padding-bottom: 2rem;
+  min-height: 0;
+  padding-top: 6rem;
+  padding-bottom: 3rem;
 }
 
 .hero .row {
-  min-height: 72vh;
+  min-height: 0;
   margin-bottom: 0;
 }
 
@@ -19,16 +19,16 @@
 }
 
 .hero h1 {
-  font-size: clamp(3.2rem, 5vw, 6rem);
-  line-height: 0.96;
-  margin-bottom: 1.25rem;
+  font-size: clamp(2.8rem, 5vw, 4.8rem);
+  line-height: 1.08;
+  margin-bottom: 1rem;
   max-width: 760px;
 }
 
 .hero-text {
-  font-size: 1.18rem;
+  font-size: 1.1rem;
   max-width: 640px;
-  margin-bottom: 1.8rem;
+  margin-bottom: 1.25rem;
 }
 
 .hero-buttons {
@@ -40,7 +40,7 @@
   display: flex;
   flex-wrap: wrap;
   gap: 0.75rem;
-  margin-top: 1.75rem;
+  margin-top: 0;
 }
 
 .hero .delivery-badges span {

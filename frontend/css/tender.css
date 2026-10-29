@@ -1,51 +1,97 @@
+/* =========================================
+   VINKEN SOLUTIONS LIMITED
+   TENDER PAGE
+========================================= */
+
 .tender-summary,
 .tender-process-card,
 .tender-brief {
   border: 1px solid rgba(17, 59, 92, 0.08);
-  border-radius: 1.1rem;
+  border-radius: 1rem;
   background: #fff;
-  box-shadow: 0 18px 38px rgba(16, 38, 56, 0.05);
+  box-shadow: 0 12px 30px rgba(16, 38, 56, 0.05);
 }
 
+/* Tender summary */
 .tender-summary {
-  padding: 2rem 1.5rem;
-}
-
-.tender-brief {
   padding: 1.5rem;
-  background: linear-gradient(180deg, #f7fbfd 0%, #ffffff 100%);
 }
 
+/* Tender brief */
+.tender-brief {
+  padding: 1.25rem;
+  background: linear-gradient(180deg, #f7fbfd 0%, #fff 100%);
+}
+
+/* Tender process cards */
 .tender-process-card {
-  padding: 1.8rem 1.25rem;
+  padding: 1.5rem 1.15rem;
   height: 100%;
   position: relative;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.tender-process-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 16px 34px rgba(16, 38, 56, 0.08);
 }
 
 .tender-process-card .process-number {
   position: absolute;
-  right: 1rem;
-  top: 1rem;
+  right: 0.85rem;
+  top: 0.75rem;
   color: rgba(8, 126, 139, 0.18);
-  font-size: 2.4rem;
+  font-size: 2rem;
   font-weight: 800;
 }
 
 .tender-process-card i {
   display: block;
-  font-size: 2rem;
+  font-size: 1.8rem;
   color: var(--secondary-color);
-  margin-bottom: 1rem;
+  margin-bottom: 0.75rem;
 }
 
 .tender-process-card h5 {
   color: var(--dark-color);
+  margin-bottom: 0.6rem;
+}
+
+.tender-process-card p {
+  margin-bottom: 0;
+  line-height: 1.65;
+}
+
+@media (max-width: 767.98px) {
+  .tender-summary {
+    padding: 1.25rem;
+  }
+
+  .tender-brief,
+  .tender-process-card {
+    padding: 1.2rem 1rem;
+  }
 }
 
 @media (max-width: 575.98px) {
+
   .tender-summary,
   .tender-brief,
   .tender-process-card {
-    padding: 1.3rem 1rem;
+    border-radius: 0.85rem;
+  }
+
+  .tender-process-card .process-number {
+    font-size: 1.7rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tender-process-card {
+    transition: none;
+  }
+
+  .tender-process-card:hover {
+    transform: none;
   }
 }

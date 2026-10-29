@@ -1,0 +1,329 @@
+/* =========================================
+   VINKEN SOLUTIONS LIMITED
+   GLOBAL SPACING FIX
+========================================= */
+
+:root {
+    --section-space: clamp(2.75rem, 5vw, 4.25rem);
+    --card-padding: 1.5rem;
+}
+
+/* Global layout */
+html {
+    scroll-behavior: smooth;
+    scroll-padding-top: 85px;
+}
+
+body {
+    line-height: 1.65;
+    overflow-wrap: break-word;
+}
+
+img {
+    max-width: 100%;
+    height: auto;
+}
+
+/* Consistent Bootstrap container widths */
+.container {
+    width: 100%;
+}
+
+/* Navbar: reduce unnecessary height */
+.navbar {
+    padding: 0.65rem 0;
+}
+
+.navbar-brand {
+    gap: 0.6rem;
+}
+
+.navbar .nav-link {
+    padding: 0.5rem 0.55rem;
+}
+
+.navbar-collapse {
+    margin-top: 0;
+}
+
+@media (max-width: 991.98px) {
+    .navbar-collapse {
+        margin-top: 0.5rem;
+        padding: 0.65rem;
+    }
+
+    .navbar .nav-link {
+        padding: 0.5rem 0.65rem;
+    }
+}
+
+/* Standard section spacing */
+.section-padding {
+    padding-top: var(--section-space);
+    padding-bottom: var(--section-space);
+}
+
+/* Interior page headers */
+.page-header {
+    padding-top: 7.5rem;
+    padding-bottom: 3rem;
+}
+
+.page-header h1 {
+    margin-bottom: 0.65rem;
+}
+
+.page-header p:last-child {
+    margin-bottom: 0;
+}
+
+/* Homepage hero */
+.hero {
+    min-height: 0;
+    padding-top: 6rem;
+    padding-bottom: 3rem;
+    display: flex;
+    align-items: center;
+}
+
+.hero .row {
+    min-height: 0;
+    margin-bottom: 0;
+}
+
+.hero h1 {
+    margin-bottom: 1rem;
+}
+
+.hero-text {
+    margin-bottom: 1.5rem;
+}
+
+/* Standard heading spacing */
+.section-heading h2 {
+    margin-bottom: 0.75rem;
+}
+
+.section-heading>p:last-child {
+    margin-bottom: 0;
+}
+
+.section-label {
+    margin-bottom: 0.5rem;
+}
+
+/* Reduce oversized Bootstrap section spacing */
+.py-5 {
+    padding-top: var(--section-space) !important;
+    padding-bottom: var(--section-space) !important;
+}
+
+.mb-5 {
+    margin-bottom: 1.75rem !important;
+}
+
+.mt-5 {
+    margin-top: 1.75rem !important;
+}
+
+.g-5 {
+    --bs-gutter-x: 1.5rem;
+    --bs-gutter-y: 1.5rem;
+}
+
+/* Cards: consistent internal spacing */
+.about-box,
+.about-highlight,
+.category-card,
+.service-card,
+.about-service-card,
+.why-card,
+.approach-item,
+.process-card,
+.service-area-box {
+    padding: var(--card-padding);
+}
+
+/* Keep card content compact */
+.category-card h3,
+.service-card h3,
+.about-service-card h5,
+.why-card h5,
+.process-card h3,
+.process-card h5 {
+    margin-bottom: 0.65rem;
+}
+
+.category-card p,
+.service-card p,
+.about-service-card p,
+.why-card p,
+.process-card p {
+    margin-bottom: 0.75rem;
+}
+
+/* Icons should not create excessive vertical gaps */
+.category-icon,
+.service-icon,
+.about-icon,
+.about-service-icon,
+.contact-icon {
+    margin-bottom: 1rem;
+}
+
+/* About page approach cards */
+.approach-item {
+    height: 100%;
+}
+
+.approach-item i {
+    margin-bottom: 0.75rem;
+}
+
+/* Tender form */
+#request-form .card-body {
+    padding: 1.5rem !important;
+}
+
+#request-form .row {
+    --bs-gutter-y: 1rem;
+}
+
+#request-form textarea.form-control {
+    min-height: 110px;
+}
+
+/* Delivery showcase */
+.delivery-visual {
+    min-height: 0;
+}
+
+.delivery-image-card img {
+    height: 350px;
+}
+
+.delivery-svg {
+    max-width: 360px;
+}
+
+/* CTA */
+.cta-section {
+    padding: 2.75rem 0;
+}
+
+.cta-section h2 {
+    margin-bottom: 0.65rem;
+}
+
+.cta-section p {
+    margin-bottom: 1rem;
+}
+
+/* Footer */
+.footer {
+    padding-top: 2.75rem;
+    padding-bottom: 1rem;
+}
+
+.footer h3,
+.footer h4,
+.footer h5 {
+    margin-bottom: 0.75rem;
+}
+
+.footer .row {
+    --bs-gutter-y: 1.25rem;
+}
+
+.footer hr {
+    margin: 1.5rem 0 1rem;
+}
+
+.footer p {
+    margin-bottom: 0.65rem;
+}
+
+.footer ul li {
+    margin-bottom: 0.35rem;
+}
+
+/* Images and maps */
+.product-image {
+    height: 200px;
+}
+
+.contact-map iframe {
+    min-height: 300px;
+}
+
+/* Mobile spacing */
+@media (max-width: 575.98px) {
+    :root {
+        --section-space: 2.5rem;
+        --card-padding: 1.25rem;
+    }
+
+    .page-header {
+        padding-top: 7rem;
+        padding-bottom: 2.25rem;
+    }
+
+    .hero {
+        min-height: 0;
+        padding-top: 6.5rem;
+        padding-bottom: 2.5rem;
+        text-align: center;
+    }
+
+    .hero h1 {
+        font-size: clamp(2.3rem, 10vw, 3.2rem);
+        line-height: 1.08;
+    }
+
+    .hero-text {
+        font-size: 1rem;
+        line-height: 1.65;
+    }
+
+    .hero-buttons {
+        gap: 0.65rem;
+    }
+
+    .hero-buttons .btn {
+        width: 100%;
+    }
+
+    .delivery-image-card img {
+        height: 260px;
+    }
+
+    .delivery-overlay {
+        left: 0.65rem;
+        right: 0.65rem;
+        bottom: 0.65rem;
+        padding: 0.75rem;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.25rem;
+    }
+
+    .delivery-svg {
+        display: none;
+    }
+
+    .cta-section {
+        padding: 2.25rem 0;
+    }
+
+    .footer {
+        padding-top: 2.25rem;
+    }
+
+    #request-form .card-body {
+        padding: 1.1rem !important;
+    }
+
+    .contact-map iframe {
+        min-height: 240px;
+    }
+}

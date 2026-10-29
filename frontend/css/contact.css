@@ -1,3 +1,9 @@
+/* =========================================
+   VINKEN SOLUTIONS LIMITED
+   CONTACT PAGE — REFINED SPACING
+========================================= */
+
+/* Smooth, consistent transitions */
 .contact-info-card,
 .contact-map,
 .contact-benefit,
@@ -8,90 +14,253 @@
   transition: all 0.2s ease;
 }
 
+/* =========================================
+   PAGE HEADER
+========================================= */
+
+.page-header {
+  padding: 5rem 0 3.5rem;
+}
+
+.page-header h1 {
+  margin-bottom: 1rem;
+}
+
+.page-header p {
+  max-width: 680px;
+  margin: 0 auto;
+}
+
+/* =========================================
+   CONTACT INFORMATION CARDS
+========================================= */
+
 .contact-info-card {
+  height: 100%;
+  padding: 1.75rem 1.25rem;
   background: #fff;
   border: 1px solid rgba(17, 59, 92, 0.08);
-  border-radius: 1.1rem;
-  padding: 2rem 1.2rem;
-  box-shadow: 0 18px 42px rgba(16, 38, 56, 0.05);
+  border-radius: 1rem;
+  box-shadow: 0 10px 30px rgba(16, 38, 56, 0.06);
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .contact-icon {
   display: inline-flex;
   align-items: center;
   justify-content: center;
+  flex-shrink: 0;
+
   width: 3.25rem;
   height: 3.25rem;
-  border-radius: 1rem;
-  background: rgba(8, 126, 139, 0.1);
+  margin-bottom: 1.1rem;
+
+  border-radius: 0.9rem;
+  background: rgba(8, 126, 139, 0.10);
   color: var(--secondary-color);
-  font-size: 1.5rem;
-  margin-bottom: 1rem;
+  font-size: 1.45rem;
 }
 
 .contact-info-card h5 {
+  margin-bottom: 0.65rem;
   color: var(--dark-color);
-  margin-bottom: 0.75rem;
+  font-size: 1.05rem;
+  font-weight: 700;
+}
+
+.contact-info-card p {
+  margin-bottom: 0.8rem;
+  font-size: 0.92rem;
+  line-height: 1.65;
 }
 
 .contact-info-card a,
 .contact-info-card span {
   color: var(--secondary-color);
   font-weight: 600;
+  overflow-wrap: anywhere;
 }
 
-.contact-benefit {
-  padding: 1.25rem 1.2rem;
-  border-radius: 1rem;
-  background: rgba(8, 126, 139, 0.04);
-  border: 1px solid rgba(17, 59, 92, 0.06);
+.contact-info-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 16px 36px rgba(16, 38, 56, 0.10);
 }
 
-.map-section {
-  background: linear-gradient(180deg, #f7fbfd 0%, #edf5f8 100%);
-}
+/* =========================================
+   CONTACT FORM SECTION
+========================================= */
 
-.contact-map {
-  overflow: hidden;
-  border-radius: 1.25rem;
+#contact-form .card {
+  height: 100%;
   border: 1px solid rgba(17, 59, 92, 0.08);
-  box-shadow: 0 20px 52px rgba(16, 38, 56, 0.08);
+  border-radius: 1rem;
+  box-shadow: 0 16px 40px rgba(16, 38, 56, 0.07);
 }
 
-.contact-map iframe {
-  width: 100%;
-  min-height: 22rem;
-  border: 0;
-  display: block;
-  filter: grayscale(0.15) contrast(1.06);
+#contact-form .card-body {
+  padding: 2rem;
 }
 
-#contact-form .card,
-#contact-form .form-control,
-#contact-form .form-select {
-  border-radius: 0.9rem;
+#contact-form h4 {
+  margin-bottom: 1.5rem;
+  color: var(--dark-color);
+  font-weight: 700;
+}
+
+#contact-form .form-label {
+  margin-bottom: 0.45rem;
+  color: var(--dark-color);
+  font-size: 0.92rem;
+  font-weight: 600;
+}
+
+#contact-form .row {
+  --bs-gutter-x: 1.25rem;
+  --bs-gutter-y: 1.15rem;
 }
 
 #contact-form .form-control,
 #contact-form .form-select {
   min-height: 3rem;
-  border: 1px solid rgba(17, 59, 92, 0.12);
-  background: #fff;
+  padding: 0.75rem 0.9rem;
+  border: 1px solid rgba(17, 59, 92, 0.14);
+  border-radius: 0.65rem;
+  background-color: #fff;
   box-shadow: none;
+}
+
+#contact-form textarea.form-control {
+  min-height: 9rem;
+  resize: vertical;
 }
 
 #contact-form .form-control:focus,
 #contact-form .form-select:focus {
   border-color: rgba(8, 126, 139, 0.65);
-  box-shadow: 0 0 0 0.2rem rgba(8, 126, 139, 0.15);
+  box-shadow: 0 0 0 0.2rem rgba(8, 126, 139, 0.12);
+}
+
+#contact-form .btn {
+  min-height: 3.25rem;
+  border-radius: 0.65rem;
+  font-weight: 600;
+}
+
+/* =========================================
+   BENEFITS LIST
+========================================= */
+
+.contact-benefit {
+  padding: 1.4rem;
+  border: 1px solid rgba(17, 59, 92, 0.07);
+  border-radius: 0.9rem;
+  background: rgba(8, 126, 139, 0.045);
+}
+
+.contact-benefit .d-flex {
+  align-items: flex-start;
+  gap: 0.75rem;
+}
+
+.contact-benefit .d-flex i {
+  flex-shrink: 0;
+  margin-right: 0 !important;
+  line-height: 1.6;
+}
+
+.contact-benefit .d-flex span {
+  line-height: 1.6;
+}
+
+/* =========================================
+   MAP SECTION
+========================================= */
+
+.map-section {
+  padding-top: 4rem;
+  padding-bottom: 4rem;
+  background: linear-gradient(180deg, #f7fbfd 0%, #edf5f8 100%);
+}
+
+.map-section h2 {
+  margin-bottom: 1rem;
+}
+
+.map-section .contact-map {
+  overflow: hidden;
+  border: 1px solid rgba(17, 59, 92, 0.08);
+  border-radius: 1rem;
+  box-shadow: 0 16px 40px rgba(16, 38, 56, 0.08);
+}
+
+.contact-map iframe {
+  display: block;
+  width: 100%;
+  height: 24rem;
+  border: 0;
+  filter: grayscale(0.1) contrast(1.04);
+}
+
+/* =========================================
+   RESPONSIVE SPACING
+========================================= */
+
+@media (min-width: 992px) {
+  .contact-info-card {
+    padding: 1.75rem 1.1rem;
+  }
+
+  #contact-form .card-body {
+    padding: 2.25rem;
+  }
+}
+
+@media (max-width: 991.98px) {
+  .page-header {
+    padding: 4rem 0 3rem;
+  }
+
+  .contact-info-card {
+    padding: 1.5rem 1rem;
+  }
+
+  .map-section {
+    padding-top: 3rem;
+    padding-bottom: 3rem;
+  }
 }
 
 @media (max-width: 575.98px) {
+  .page-header {
+    padding: 3rem 0 2.5rem;
+  }
+
   .contact-info-card {
     padding: 1.4rem 1.1rem;
   }
 
+  #contact-form .card-body {
+    padding: 1.25rem;
+  }
+
+  #contact-form .row {
+    --bs-gutter-x: 1rem;
+    --bs-gutter-y: 1rem;
+  }
+
+  .contact-benefit {
+    padding: 1.1rem;
+  }
+
   .contact-map iframe {
-    min-height: 18rem;
+    height: 18rem;
+  }
+
+  .map-section {
+    padding-top: 2.75rem;
+    padding-bottom: 2.75rem;
   }
 }

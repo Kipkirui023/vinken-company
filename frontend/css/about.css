@@ -1,3 +1,7 @@
+/* ================================
+   ABOUT PAGE — PROFESSIONAL SPACING
+================================ */
+
 .about-intro,
 .about-company,
 .about-details,
@@ -7,87 +11,233 @@
   position: relative;
 }
 
+/* Consistent section spacing */
+.about-intro,
+.about-approach {
+  padding-top: 4rem;
+  padding-bottom: 4rem;
+}
+
+/* ================================
+   INTRODUCTION HIGHLIGHT
+================================ */
+
 .about-highlight {
-  background: linear-gradient(180deg, #f6fbfd 0%, #edf7f8 100%);
+  height: 100%;
   padding: 2.25rem;
-  border-radius: 1.25rem;
-  border: 1px solid rgba(17, 59, 92, 0.08);
+  background: linear-gradient(180deg, #f6fbfd 0%, #edf7f8 100%);
+  border: 1px solid rgba(17, 59, 92, 0.09);
   border-left: 4px solid var(--secondary-color);
-  box-shadow: 0 18px 42px rgba(16, 38, 56, 0.06);
+  border-radius: 1.1rem;
+  box-shadow: 0 12px 32px rgba(16, 38, 56, 0.06);
 }
 
 .about-highlight-icon {
-  width: 4rem;
-  height: 4rem;
+  width: 3.75rem;
+  height: 3.75rem;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  border-radius: 1rem;
-  background: rgba(8, 126, 139, 0.12);
-  color: var(--secondary-color);
-  font-size: 1.8rem;
   margin-bottom: 1.25rem;
   border: 1px solid rgba(8, 126, 139, 0.12);
-}
-
-.about-service-card {
-  background: #fff;
-  padding: 2rem 1.6rem;
-  border-radius: 1rem;
-  border: 1px solid rgba(17, 59, 92, 0.08);
-  box-shadow: 0 16px 38px rgba(16, 38, 56, 0.06);
-  transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
-}
-
-.about-service-card:hover,
-.approach-item:hover,
-.why-card:hover,
-.contact-info-card:hover,
-.category-card:hover,
-.service-card:hover,
-.product-category-card:hover,
-.process-card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 18px 48px rgba(16, 38, 56, 0.11);
-  border-color: rgba(8, 126, 139, 0.25);
-}
-
-.about-service-icon {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 3.2rem;
-  height: 3.2rem;
   border-radius: 0.9rem;
   background: rgba(8, 126, 139, 0.1);
   color: var(--secondary-color);
-  font-size: 1.7rem;
-  margin-bottom: 1rem;
+  font-size: 1.65rem;
 }
+
+.about-highlight h4 {
+  margin-bottom: 0.9rem;
+  line-height: 1.4;
+}
+
+.about-highlight p {
+  margin-bottom: 0.85rem;
+  line-height: 1.75;
+}
+
+.about-highlight h5 {
+  margin-bottom: 0.45rem;
+}
+
+.about-highlight .row {
+  --bs-gutter-x: 1.25rem;
+  --bs-gutter-y: 1rem;
+}
+
+/* ================================
+   SERVICE CARDS
+================================ */
+
+.about-service-card {
+  height: 100%;
+  padding: 1.75rem 1.5rem;
+  background: #fff;
+  border: 1px solid rgba(17, 59, 92, 0.09);
+  border-radius: 1rem;
+  box-shadow: 0 8px 24px rgba(16, 38, 56, 0.045);
+  transition:
+    transform 0.25s ease,
+    box-shadow 0.25s ease,
+    border-color 0.25s ease;
+}
+
+.about-service-icon {
+  width: 3.25rem;
+  height: 3.25rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 1rem;
+  border-radius: 0.85rem;
+  background: rgba(8, 126, 139, 0.1);
+  color: var(--secondary-color);
+  font-size: 1.55rem;
+}
+
+.about-service-card h5 {
+  margin-bottom: 0.7rem;
+  line-height: 1.4;
+}
+
+.about-service-card p {
+  margin-bottom: 0;
+  color: #5e6b75;
+  line-height: 1.75;
+}
+
+/* ================================
+   APPROACH AND WHY-VINKEN CARDS
+================================ */
 
 .approach-item,
 .why-card {
+  height: 100%;
+  padding: 1.6rem 1.35rem;
   background: #fff;
-  padding: 1.7rem 1.4rem;
+  border: 1px solid rgba(17, 59, 92, 0.09);
   border-radius: 1rem;
-  border: 1px solid rgba(17, 59, 92, 0.08);
-  box-shadow: 0 16px 36px rgba(16, 38, 56, 0.05);
-  transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+  box-shadow: 0 8px 24px rgba(16, 38, 56, 0.045);
+  transition:
+    transform 0.25s ease,
+    box-shadow 0.25s ease,
+    border-color 0.25s ease;
 }
 
 .approach-item i,
-.why-card > i {
-  display: block;
-  font-size: 2.1rem;
-  color: var(--secondary-color);
+.why-card>i {
+  display: inline-block;
   margin-bottom: 1rem;
+  color: var(--secondary-color);
+  font-size: 1.9rem;
 }
 
-@media (max-width: 575.98px) {
-  .about-highlight,
+.approach-item h5,
+.why-card h5 {
+  margin-bottom: 0.65rem;
+  line-height: 1.4;
+}
+
+.approach-item p,
+.why-card p {
+  margin-bottom: 0;
+  color: #5e6b75;
+  line-height: 1.7;
+}
+
+/* ================================
+   CONSISTENT HOVER EFFECTS
+================================ */
+
+.about-service-card:hover,
+.approach-item:hover,
+.why-card:hover {
+  transform: translateY(-4px);
+  border-color: rgba(8, 126, 139, 0.25);
+  box-shadow: 0 16px 36px rgba(16, 38, 56, 0.09);
+}
+
+/* ================================
+   RESPONSIVE SPACING
+================================ */
+
+@media (min-width: 992px) {
+
+  .about-intro,
+  .about-approach {
+    padding-top: 4.5rem;
+    padding-bottom: 4.5rem;
+  }
+
+  .about-highlight {
+    padding: 2.25rem;
+  }
+}
+
+@media (max-width: 767.98px) {
+
+  .about-intro,
+  .about-approach {
+    padding-top: 3rem;
+    padding-bottom: 3rem;
+  }
+
+  .about-highlight {
+    padding: 1.75rem;
+  }
+
   .about-service-card,
   .approach-item,
   .why-card {
-    padding: 1.4rem 1.1rem;
+    padding: 1.5rem 1.25rem;
+  }
+}
+
+@media (max-width: 575.98px) {
+
+  .about-intro,
+  .about-approach {
+    padding-top: 2.5rem;
+    padding-bottom: 2.5rem;
+  }
+
+  .about-highlight {
+    padding: 1.35rem;
+    border-radius: 0.9rem;
+  }
+
+  .about-highlight-icon {
+    width: 3.25rem;
+    height: 3.25rem;
+    font-size: 1.45rem;
+  }
+
+  .about-service-card,
+  .approach-item,
+  .why-card {
+    padding: 1.25rem 1.1rem;
+    border-radius: 0.85rem;
+  }
+
+  .about-service-icon {
+    width: 3rem;
+    height: 3rem;
+    font-size: 1.4rem;
+  }
+}
+
+/* Respect reduced-motion preferences */
+@media (prefers-reduced-motion: reduce) {
+
+  .about-service-card,
+  .approach-item,
+  .why-card {
+    transition: none;
+  }
+
+  .about-service-card:hover,
+  .approach-item:hover,
+  .why-card:hover {
+    transform: none;
   }
 }
