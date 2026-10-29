@@ -1,8 +1,14 @@
 (() => {
   "use strict";
 
-  const API_KEY_STORAGE = "vinkenAdminKey";
-  const QUOTATION_STATUSES = ["new", "reviewing", "quoted", "completed", "cancelled"];
+  const API_KEY_STORAGE = "916ffc63920b280ef57b324915d06eb2";
+  const QUOTATION_STATUSES = [
+    "new",
+    "reviewing",
+    "quoted",
+    "completed",
+    "cancelled",
+  ];
   const state = {
     apiKey: "",
     inquiries: [],
@@ -36,28 +42,38 @@
       headers.set("content-type", "application/json");
     }
 
-    const response = await fetch(url, { ...options, headers, credentials: "same-origin" });
+    const response = await fetch(url, {
+      ...options,
+      headers,
+      credentials: "same-origin",
+    });
     const contentType = response.headers.get("content-type") || "";
     if (!contentType.includes("application/json")) {
       if (response.status === 404) {
         throw new Error(
           `The server at ${window.location.origin} does not provide the dashboard API. ` +
-          "Start the app with “npm start” and open http://localhost:5000/admin.html, " +
-          "or configure your web host to forward /api requests to the Express server.",
+            "Start the app with “npm start” and open http://localhost:5000/admin.html, " +
+            "or configure your web host to forward /api requests to the Express server.",
         );
       }
-      throw new Error(`The server returned an unexpected response (${response.status}).`);
+      throw new Error(
+        `The server returned an unexpected response (${response.status}).`,
+      );
     }
 
     let result;
     try {
       result = await response.json();
     } catch {
-      throw new Error(`The server returned an invalid response (${response.status}).`);
+      throw new Error(
+        `The server returned an invalid response (${response.status}).`,
+      );
     }
 
     if (!response.ok || result.success === false) {
-      const error = new Error(result.message || `Request failed (${response.status}).`);
+      const error = new Error(
+        result.message || `Request failed (${response.status}).`,
+      );
       error.status = response.status;
       throw error;
     }
@@ -112,7 +128,11 @@
     if (!value) return "—";
     const date = new Date(value);
     if (Number.isNaN(date.getTime())) return "—";
-    return new Intl.DateTimeFormat(undefined, { month: "short", day: "numeric", year: "numeric" }).format(date);
+    return new Intl.DateTimeFormat(undefined, {
+      month: "short",
+      day: "numeric",
+      year: "numeric",
+    }).format(date);
   }
 
   function readableStatus(value) {
@@ -121,14 +141,26 @@
 
   function statusPill(status) {
     const label = readableStatus(status);
-    return element("span", `status-pill status-${String(status || "").toLowerCase()}`, label);
+    return element(
+      "span",
+      `status-pill status-${String(status || "").toLowerCase()}`,
+      label,
+    );
   }
 
   function contactCell(record) {
     const wrapper = element("div", "contact-cell");
     wrapper.append(
-      element("strong", "", record.contact_person || record.organization_name || "Unknown contact"),
-      element("span", "", record.organization_name || record.email || "No organization"),
+      element(
+        "strong",
+        "",
+        record.contact_person || record.organization_name || "Unknown contact",
+      ),
+      element(
+        "span",
+        "",
+        record.organization_name || record.email || "No organization",
+      ),
     );
     return wrapper;
   }
@@ -136,7 +168,8 @@
   function createCell(content, className = "") {
     const cell = element("td", className);
     if (content instanceof Node) cell.append(content);
-    else if (content !== undefined && content !== null) cell.textContent = String(content);
+    else if (content !== undefined && content !== null)
+      cell.textContent = String(content);
     return cell;
   }
 
@@ -154,10 +187,15 @@
   }
 
   function renderMetrics() {
-    const newInquiries = state.inquiries.filter((item) => item.status === "new").length;
-    const openQuotes = state.quotations.filter((item) => ["new", "reviewing"].includes(item.status)).length;
+    const newInquiries = state.inquiries.filter(
+      (item) => item.status === "new",
+    ).length;
+    const openQuotes = state.quotations.filter((item) =>
+      ["new", "reviewing"].includes(item.status),
+    ).length;
     byId("metricInquiries").textContent = state.inquiries.length;
-    byId("metricNewInquiries").textContent = `${newInquiries} new ${newInquiries === 1 ? "inquiry" : "inquiries"}`;
+    byId("metricNewInquiries").textContent =
+      `${newInquiries} new ${newInquiries === 1 ? "inquiry" : "inquiries"}`;
     byId("metricQuotations").textContent = state.quotations.length;
     byId("metricOpenQuotes").textContent = `${openQuotes} need attention`;
     byId("metricProducts").textContent = state.products.length;
@@ -166,8 +204,10 @@
     byId("quotationNavCount").textContent = openQuotes;
     byId("productTabCount").textContent = state.products.length;
     byId("serviceTabCount").textContent = state.services.length;
-    byId("inquiryTotal").textContent = `${state.inquiries.length} ${state.inquiries.length === 1 ? "message" : "messages"}`;
-    byId("quotationTotal").textContent = `${state.quotations.length} ${state.quotations.length === 1 ? "request" : "requests"}`;
+    byId("inquiryTotal").textContent =
+      `${state.inquiries.length} ${state.inquiries.length === 1 ? "message" : "messages"}`;
+    byId("quotationTotal").textContent =
+      `${state.quotations.length} ${state.quotations.length === 1 ? "request" : "requests"}`;
   }
 
   function renderChart() {
@@ -176,7 +216,9 @@
     for (let offset = 5; offset >= 0; offset -= 1) {
       const month = new Date(now.getFullYear(), now.getMonth() - offset, 1);
       months.push({
-        label: new Intl.DateTimeFormat(undefined, { month: "short" }).format(month),
+        label: new Intl.DateTimeFormat(undefined, { month: "short" }).format(
+          month,
+        ),
         year: month.getFullYear(),
         month: month.getMonth(),
         count: 0,
@@ -186,7 +228,10 @@
     state.quotations.forEach((item) => {
       const date = new Date(item.created_at);
       if (Number.isNaN(date.getTime())) return;
-      const bucket = months.find((month) => month.year === date.getFullYear() && month.month === date.getMonth());
+      const bucket = months.find(
+        (month) =>
+          month.year === date.getFullYear() && month.month === date.getMonth(),
+      );
       if (bucket) bucket.count += 1;
     });
 
@@ -196,11 +241,18 @@
     months.forEach((month, index) => {
       const column = element("div", "chart-month");
       const track = element("div", "chart-bar-track");
-      const bar = element("div", `chart-bar${index === months.length - 1 ? " is-current" : ""}`);
-      const height = month.count === 0 ? 5 : Math.max(10, (month.count / max) * 100);
+      const bar = element(
+        "div",
+        `chart-bar${index === months.length - 1 ? " is-current" : ""}`,
+      );
+      const height =
+        month.count === 0 ? 5 : Math.max(10, (month.count / max) * 100);
       bar.style.height = `${height}%`;
       bar.title = `${month.count} ${month.count === 1 ? "request" : "requests"}`;
-      bar.setAttribute("aria-label", `${month.label}: ${month.count} ${month.count === 1 ? "request" : "requests"}`);
+      bar.setAttribute(
+        "aria-label",
+        `${month.label}: ${month.count} ${month.count === 1 ? "request" : "requests"}`,
+      );
       track.append(bar);
       column.append(track, element("small", "", month.label));
       chart.append(column);
@@ -209,7 +261,9 @@
 
   function renderStatusSummary() {
     const counts = new Map(QUOTATION_STATUSES.map((status) => [status, 0]));
-    state.quotations.forEach((item) => counts.set(item.status, (counts.get(item.status) || 0) + 1));
+    state.quotations.forEach((item) =>
+      counts.set(item.status, (counts.get(item.status) || 0) + 1),
+    );
     const total = Math.max(1, state.quotations.length);
     const summary = byId("statusSummary");
     summary.replaceChildren();
@@ -219,7 +273,11 @@
       const fill = element("div", "status-fill");
       fill.style.width = `${(counts.get(status) / total) * 100}%`;
       track.append(fill);
-      line.append(element("span", "", readableStatus(status)), track, element("span", "status-number", counts.get(status)));
+      line.append(
+        element("span", "", readableStatus(status)),
+        track,
+        element("span", "status-number", counts.get(status)),
+      );
       summary.append(line);
     });
   }
@@ -232,7 +290,9 @@
       const row = document.createElement("tr");
       row.append(
         createCell(contactCell(item)),
-        createCell(element("span", "table-clip", item.subject || "General inquiry")),
+        createCell(
+          element("span", "table-clip", item.subject || "General inquiry"),
+        ),
         createCell(dateLabel(item.created_at), "table-date"),
         createCell(statusPill(item.status)),
         createCell(createRowAction("inquiry", item.id, "View inquiry")),
@@ -251,7 +311,13 @@
 
   function matchesFilters(item, search, status, fields) {
     const query = search.trim().toLocaleLowerCase();
-    const matchesSearch = !query || fields.some((field) => String(item[field] || "").toLocaleLowerCase().includes(query));
+    const matchesSearch =
+      !query ||
+      fields.some((field) =>
+        String(item[field] || "")
+          .toLocaleLowerCase()
+          .includes(query),
+      );
     return matchesSearch && (status === "all" || item.status === status);
   }
 
@@ -259,7 +325,13 @@
     const search = byId("inquirySearch").value;
     const status = byId("inquiryStatusFilter").value;
     const matches = state.inquiries.filter((item) =>
-      matchesFilters(item, search, status, ["contact_person", "organization_name", "email", "subject", "message"]),
+      matchesFilters(item, search, status, [
+        "contact_person",
+        "organization_name",
+        "email",
+        "subject",
+        "message",
+      ]),
     );
     const body = byId("inquiriesTable");
     body.replaceChildren();
@@ -267,7 +339,9 @@
       const row = document.createElement("tr");
       row.append(
         createCell(contactCell(item)),
-        createCell(element("span", "table-clip", item.subject || "General inquiry")),
+        createCell(
+          element("span", "table-clip", item.subject || "General inquiry"),
+        ),
         createCell(element("span", "table-clip", item.message || "")),
         createCell(dateLabel(item.created_at), "table-date"),
         createCell(statusPill(item.status)),
@@ -283,7 +357,14 @@
     const search = byId("quotationSearch").value;
     const status = byId("quotationStatusFilter").value;
     const matches = state.quotations.filter((item) =>
-      matchesFilters(item, search, status, ["contact_person", "organization_name", "email", "product_service", "requirement_type", "tender_lpo_reference"]),
+      matchesFilters(item, search, status, [
+        "contact_person",
+        "organization_name",
+        "email",
+        "product_service",
+        "requirement_type",
+        "tender_lpo_reference",
+      ]),
     );
     const body = byId("quotationsTable");
     body.replaceChildren();
@@ -318,7 +399,8 @@
       body.append(row);
     });
     byId("quotationsEmpty").hidden = matches.length !== 0;
-    byId("quotationsTable").closest(".table-wrap").hidden = matches.length === 0;
+    byId("quotationsTable").closest(".table-wrap").hidden =
+      matches.length === 0;
   }
 
   function renderCatalogueList(type) {
@@ -333,10 +415,17 @@
     records.forEach((item) => {
       const row = element("div", "catalogue-item");
       const icon = element("span", "catalogue-item-icon");
-      icon.append(element("i", isProduct ? "bi bi-box-seam" : "bi bi-briefcase"));
-      const description = isProduct ? item.category || item.description || "Product" : item.description || "Company service";
+      icon.append(
+        element("i", isProduct ? "bi bi-box-seam" : "bi bi-briefcase"),
+      );
+      const description = isProduct
+        ? item.category || item.description || "Product"
+        : item.description || "Company service";
       const main = element("div", "catalogue-item-main");
-      main.append(element("strong", "", item.name), element("span", "", description));
+      main.append(
+        element("strong", "", item.name),
+        element("span", "", description),
+      );
       const remove = element("button", "delete-button", "Remove");
       remove.type = "button";
       remove.dataset.action = `delete-${type}`;
@@ -367,7 +456,12 @@
     document.querySelectorAll(".nav-item").forEach((button) => {
       button.classList.toggle("is-active", button.dataset.view === view);
     });
-    const names = { overview: "Overview", inquiries: "Inquiries", quotations: "Quote requests", catalogue: "Catalogue" };
+    const names = {
+      overview: "Overview",
+      inquiries: "Inquiries",
+      quotations: "Quote requests",
+      catalogue: "Catalogue",
+    };
     byId("currentPage").textContent = names[view] || "Overview";
     closeSidebar();
   }
@@ -386,8 +480,12 @@
 
   function showDetails(record, kind) {
     const isQuotation = kind === "quotation";
-    byId("dialogEyebrow").textContent = isQuotation ? `QUOTE REQUEST #${record.id}` : `INQUIRY #${record.id}`;
-    byId("dialogTitle").textContent = isQuotation ? record.product_service || "Quote request" : record.subject || "General inquiry";
+    byId("dialogEyebrow").textContent = isQuotation
+      ? `QUOTE REQUEST #${record.id}`
+      : `INQUIRY #${record.id}`;
+    byId("dialogTitle").textContent = isQuotation
+      ? record.product_service || "Quote request"
+      : record.subject || "General inquiry";
     const details = byId("dialogDetails");
     details.replaceChildren();
     const entries = isQuotation
@@ -438,7 +536,8 @@
       renderQuotations();
       showNotice(`Request #${id} updated to ${readableStatus(select.value)}.`);
     } catch (error) {
-      if (error.status === 401) return showLogin("Your session has expired. Please sign in again.");
+      if (error.status === 401)
+        return showLogin("Your session has expired. Please sign in again.");
       showNotice(error.message, true);
       button.disabled = false;
     }
@@ -447,18 +546,33 @@
   async function handleDelete(button, type) {
     const isProduct = type === "products";
     const records = isProduct ? state.products : state.services;
-    const item = records.find((record) => String(record.id) === button.dataset.id);
-    if (!item || !window.confirm(`Remove “${item.name}” from the public catalogue?`)) return;
+    const item = records.find(
+      (record) => String(record.id) === button.dataset.id,
+    );
+    if (
+      !item ||
+      !window.confirm(`Remove “${item.name}” from the public catalogue?`)
+    )
+      return;
     button.disabled = true;
     try {
-      await request(`/api/${type}/${encodeURIComponent(item.id)}`, { method: "DELETE" });
-      if (isProduct) state.products = state.products.filter((record) => String(record.id) !== String(item.id));
-      else state.services = state.services.filter((record) => String(record.id) !== String(item.id));
+      await request(`/api/${type}/${encodeURIComponent(item.id)}`, {
+        method: "DELETE",
+      });
+      if (isProduct)
+        state.products = state.products.filter(
+          (record) => String(record.id) !== String(item.id),
+        );
+      else
+        state.services = state.services.filter(
+          (record) => String(record.id) !== String(item.id),
+        );
       renderMetrics();
       renderCatalogueList(type);
       showNotice(`${item.name} has been removed from the catalogue.`);
     } catch (error) {
-      if (error.status === 401) return showLogin("Your session has expired. Please sign in again.");
+      if (error.status === 401)
+        return showLogin("Your session has expired. Please sign in again.");
       showNotice(error.message, true);
       button.disabled = false;
     }
@@ -490,7 +604,10 @@
     feedback.classList.remove("is-error");
     submit.disabled = true;
     try {
-      await request(`/api/${type}`, { method: "POST", body: JSON.stringify(payload) });
+      await request(`/api/${type}`, {
+        method: "POST",
+        body: JSON.stringify(payload),
+      });
       const result = await request(`/api/${type}`);
       if (isProduct) state.products = result.data || [];
       else state.services = result.data || [];
@@ -499,7 +616,8 @@
       renderCatalogueList(type);
       feedback.textContent = `${isProduct ? "Product" : "Service"} added successfully.`;
     } catch (error) {
-      if (error.status === 401) return showLogin("Your session has expired. Please sign in again.");
+      if (error.status === 401)
+        return showLogin("Your session has expired. Please sign in again.");
       feedback.textContent = error.message;
       feedback.classList.add("is-error");
     } finally {
@@ -524,9 +642,10 @@
       await loadData(key);
       loginForm.reset();
     } catch (error) {
-      loginError.textContent = error.status === 401
-        ? "That administrator key was not accepted."
-        : error.message;
+      loginError.textContent =
+        error.status === 401
+          ? "That administrator key was not accepted."
+          : error.message;
       loginError.hidden = false;
     } finally {
       loginSubmit.disabled = false;
@@ -544,10 +663,14 @@
     const action = event.target.closest("[data-action]");
     if (!action) return;
     if (action.dataset.action === "inquiry") {
-      const item = state.inquiries.find((record) => String(record.id) === action.dataset.id);
+      const item = state.inquiries.find(
+        (record) => String(record.id) === action.dataset.id,
+      );
       if (item) showDetails(item, "inquiry");
     } else if (action.dataset.action === "quotation") {
-      const item = state.quotations.find((record) => String(record.id) === action.dataset.id);
+      const item = state.quotations.find(
+        (record) => String(record.id) === action.dataset.id,
+      );
       if (item) showDetails(item, "quotation");
     } else if (action.dataset.action === "save-status") {
       handleStatusSave(action);
@@ -576,7 +699,8 @@
       await loadData(state.apiKey);
       showNotice("Dashboard data refreshed.");
     } catch (error) {
-      if (error.status === 401) return showLogin("Your session has expired. Please sign in again.");
+      if (error.status === 401)
+        return showLogin("Your session has expired. Please sign in again.");
       showNotice(error.message, true);
     } finally {
       byId("refreshButton").disabled = false;
